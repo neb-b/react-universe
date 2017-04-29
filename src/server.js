@@ -11,7 +11,7 @@ const app = express()
 const PORT = process.env.port || 3000
 
 app.use(morgan('dev'))
-app.use('/client', express.static('client'));
+app.use('/dist-client', express.static('dist-client'));
 app.get('*', handleRender)
 
 const routes = [
@@ -63,7 +63,7 @@ function renderFullPage(html, preloadedState) {
         // http://redux.js.org/docs/recipes/ServerRendering.html#security-considerations
         window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
       </script>
-      <script src="/client/bundle.js"></script>
+      <script src="/dist-client/bundle.js"></script>
     </body>
   </html>
   `
