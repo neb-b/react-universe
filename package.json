@@ -1,10 +1,13 @@
 {
-  "name": "universal-auth",
+  "name": "react-universe",
   "version": "0.0.1",
-  "description": "Universal react starter with auth",
+  "description": "Universal React/Redux starter",
   "main": "src/server.js",
   "scripts": {
-    "dev": "webpack && node dist/main.js"
+    "start": "webpack -p && babel-node src/server.js",
+    "dev": "builder concurrent build:watch server",
+    "server": "babel-node src/server.js",
+    "build:watch": "webpack --watch"
   },
   "repository": {
     "type": "git",
@@ -32,7 +35,8 @@
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.4.0",
     "babel-preset-react": "^6.24.1",
-    "webpack": "^2.4.1",
-    "webpack-dev-server": "^2.4.5"
+    "builder": "^3.2.2",
+    "progress-bar-webpack-plugin": "^1.9.3",
+    "webpack": "^2.4.1"
   }
 }

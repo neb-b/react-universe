@@ -1,14 +1,16 @@
 const path = require('path')
 const webpack = require('webpack')
+const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 
 const loadBabelLoader = () => ({
   rules: [
     {
-      test: /\.js$/,
+      test: /\.(js|jsx)$/,
       exclude: /(node_modules)/,
       use: {
         loader: 'babel-loader',
-        options: {
+        query: {
+          babelrc: false,
           presets: ['env', 'react'],
           plugins: [require('babel-plugin-transform-object-rest-spread')]
         }
@@ -19,25 +21,16 @@ const loadBabelLoader = () => ({
 
 module.exports = [
   {
-    target: 'node',
-    entry: {
-      main: './src/server.js',
-    },
-    output: {
-      path: path.resolve(__dirname, './dist'),
-      filename: '[name].js'
-    },
-    module: loadBabelLoader()
-  },
-  {
     target: 'web',
-    entry: {
-      main: './src/client/index.js',
-    },
+    entry: './src/client.js',
     output: {
-      path: path.resolve(__dirname, './client'),
+      path: path.resolve(__dirname, 'public'),
+      publicPath: '/public/',
       filename: 'bundle.js'
     },
-    module: loadBabelLoader()
+    module: loadBabelLoader(),
+    plugins: [
+      new ProgressBarPlugin()
+    ]
   }
 ]

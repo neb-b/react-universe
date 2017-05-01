@@ -1,14 +1,16 @@
 import React from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import Home from './pages/home'
 import Profile from './pages/profile'
 
-const App = ({test}) => {
+const App = () => {
   return (
     <Switch>
+      <Route exact path='/' component={Home} />
       <Route path='/profile' component={Profile} />
-      <Route component={Home} />
+      <Redirect to='/' />
     </Switch>
+    
   )
 }
 
