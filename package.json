@@ -7,7 +7,8 @@
     "start": "webpack -p && babel-node src/server.js",
     "dev": "builder concurrent build:watch server",
     "server": "babel-node src/server.js",
-    "build:watch": "webpack --watch"
+    "build:watch": "webpack --watch",
+    "precommit": "lint-staged"
   },
   "repository": {
     "type": "git",
@@ -19,9 +20,15 @@
     "url": "https://github.com/seanyesmunt/react-universe/issues"
   },
   "homepage": "https://github.com/seanyesmunt/react-universe#readme",
+  "lint-staged": {
+    "src/**/*.{jsx,js}": [
+      "prettier --no-semi --use-tabs --single-quote --write",
+      "git add"
+    ]
+  },
   "dependencies": {
     "express": "^4.15.2",
-    "morgan": "^1.8.1",
+    "husky": "^0.13.3",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.4",
@@ -36,6 +43,9 @@
     "babel-preset-env": "^1.4.0",
     "babel-preset-react": "^6.24.1",
     "builder": "^3.2.2",
+    "lint-staged": "^3.4.1",
+    "morgan": "^1.8.1",
+    "prettier": "^1.2.2",
     "progress-bar-webpack-plugin": "^1.9.3",
     "webpack": "^2.4.1"
   }
