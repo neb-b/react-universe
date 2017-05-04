@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const nodeExternals = require('webpack-node-externals')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const FlowBabelWebpackPlugin = require('flow-babel-webpack-plugin');
 
 // const loadModule = () => ({
 // 	rules: [
@@ -44,7 +45,9 @@ module.exports = [
 						loader: 'babel-loader',
 						query: {
 							presets: ['env', 'react'],
-							plugins: [require('babel-plugin-transform-object-rest-spread')]
+							plugins: [
+								require('babel-plugin-transform-object-rest-spread')
+							]
 						}
 					}
 				},
@@ -76,7 +79,9 @@ module.exports = [
 						loader: 'babel-loader',
 						query: {
 							presets: ['env', 'react'],
-							plugins: [require('babel-plugin-transform-object-rest-spread')]
+							plugins: [
+								require('babel-plugin-transform-object-rest-spread')
+							]
 						}
 					}
 				},

@@ -1,12 +1,12 @@
 import React from 'react'
 import Page from './page'
 
-const Home = () => {
+const Blog = () => {
 	return (
 		<Page>
-			<h2>Hello</h2>
+			<h2>Blog</h2>
 		</Page>
 	)
 }
 
-export default Home
+export default Blog

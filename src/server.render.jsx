@@ -6,10 +6,10 @@ import { Provider } from 'react-redux'
 import App from './components/routes'
 import reducer from './redux/reducers'
 import css from './style/main.css'
-const isDev = process.env.NODE_ENV === 'deva'
+const isDev = process.env.NODE_ENV === 'dev'
 const routes = ['/', '/profile']
 
-export default (req, res) => {
+export default (req: object, res) => {
 	const store = createStore(reducer)
 	const preloadedState = store.getState()
 	const context = {}
