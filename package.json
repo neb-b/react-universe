@@ -4,9 +4,11 @@
   "description": "Universal React/Redux starter",
   "main": "src/server.js",
   "scripts": {
-    "start": "webpack -p && babel-node src/server.js",
-    "dev": "builder concurrent build:watch server",
-    "server": "babel-node src/server.js",
+    "start": "webpack -p && node dist/bundle.js",
+    "dev": "NODE_ENV=dev builder concurrent build:watch server",
+    "dev:clean": "rm -rf dist/ public/ && webpack && npm run dev",
+    "server": "node dist/bundle.js",
+    "build": "webpack",
     "build:watch": "webpack --watch",
     "precommit": "lint-staged"
   },
@@ -34,7 +36,8 @@
     "react-redux": "^5.0.4",
     "react-router-dom": "^4.1.1",
     "redux": "^3.6.0",
-    "redux-actions": "^2.0.2"
+    "redux-actions": "^2.0.2",
+    "webpack-node-externals": "^1.5.4"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
@@ -43,10 +46,12 @@
     "babel-preset-env": "^1.4.0",
     "babel-preset-react": "^6.24.1",
     "builder": "^3.2.2",
+    "css-loader": "^0.28.1",
+    "extract-text-webpack-plugin": "^2.1.0",
     "lint-staged": "^3.4.1",
     "morgan": "^1.8.1",
     "prettier": "^1.2.2",
-    "progress-bar-webpack-plugin": "^1.9.3",
+    "style-loader": "^0.17.0",
     "webpack": "^2.4.1"
   }
 }
