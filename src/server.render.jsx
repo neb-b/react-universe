@@ -6,7 +6,6 @@ import { Provider } from 'react-redux'
 import App from './components/routes'
 import reducer from './redux/reducers'
 import css from './style/main.css'
-console.log('css', css)
 const isDev = process.env.NODE_ENV === 'deva'
 const routes = ['/', '/profile']
 

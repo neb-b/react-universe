@@ -8,9 +8,6 @@
 }
 
 body {
-  background-color: green;
-}
-
-a {
-  color: black;
+  font-family: Helvetica;
+  padding: 50px;
 }
