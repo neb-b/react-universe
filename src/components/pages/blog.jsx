@@ -1,10 +1,12 @@
+// @flow
+
 import React from 'react'
 import Page from './page'
 
 const Blog = () => {
 	return (
 		<Page>
-			<h2>Blog</h2>
+			<h1>Blog</h1>
 		</Page>
 	)
 }

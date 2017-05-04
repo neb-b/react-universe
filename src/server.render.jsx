@@ -8,7 +8,7 @@ import reducer from './redux/reducers'
 import css from './style/main.css'
 const isDev = process.env.NODE_ENV === 'dev'
 
-export default (object, res) => {
+export default (req, res) => {
 	const store = createStore(reducer)
 	const preloadedState = store.getState()
 	const context = {}

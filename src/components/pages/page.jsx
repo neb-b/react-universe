@@ -1,7 +1,11 @@
+// @flow
+
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Page = ({ children }) => {
+const Page = (props: { children?: React$Element<any> }) => {
+	const { children } = props
+
 	return (
 		<div className="page-container">
 			<div>

@@ -10,6 +10,7 @@
     "server": "node dist/bundle.js",
     "build": "webpack",
     "build:watch": "webpack --watch",
+    "flow": "flow check",
     "precommit": "flow check && lint-staged"
   },
   "repository": {
