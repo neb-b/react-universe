@@ -8,7 +8,7 @@
     "dev": "NODE_ENV=dev builder concurrent build:watch server:watch",
     "server:watch": "nodemon dist/bundle.js",
     "build:watch": "webpack --watch",
-    "clean": "rm -rf dist/ public/ && webpack && npm run dev",
+    "clean": "rm -rf dist/ public/ && webpack",
     "flow": "flow check",
     "precommit": "flow check && lint-staged"
   },
@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "express": "^4.15.2",
+    "firebase-admin": "^4.2.1",
     "husky": "^0.13.3",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
