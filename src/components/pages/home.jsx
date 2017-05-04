@@ -6,7 +6,7 @@ import Page from './page'
 const Home = () => {
 	return (
 		<Page>
-			<h1>Hello</h1>
+			<h1>Hello!</h1>
 		</Page>
 	)
 }

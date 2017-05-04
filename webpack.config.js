@@ -33,7 +33,7 @@ module.exports = [
 		entry: './src/client.jsx',
 		output: {
 			path: path.resolve(__dirname, 'public'),
-			publicPath: '/public/',
+			publicPath: 'public/',
 			filename: 'bundle.js'
 		},
 		module: {
@@ -64,10 +64,10 @@ module.exports = [
 	{
 		target: 'node',
 		externals: nodeExternals(),
-		entry: './src/server.js',
+		entry: './index.js',
 		output: {
 			path: path.resolve(__dirname, 'dist'),
-			publicPath: '/dist/',
+			publicPath: 'dist/',
 			filename: 'bundle.js'
 		},
 		module: {

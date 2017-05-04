@@ -3,9 +3,10 @@ import { renderToString } from 'react-dom/server'
 import { StaticRouter, matchPath, redirect } from 'react-router-dom'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
-import App from './components/routes'
-import reducer from './redux/reducers'
-import css from './style/main.css'
+import App from '../components/routes'
+import reducer from '../redux/reducers'
+import css from '../style/main.css'
+
 const isDev = process.env.NODE_ENV === 'dev'
 
 export default (req, res) => {

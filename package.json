@@ -5,11 +5,10 @@
   "main": "src/server.js",
   "scripts": {
     "start": "webpack -p && node dist/bundle.js",
-    "dev": "NODE_ENV=dev builder concurrent build:watch server",
-    "dev:clean": "rm -rf dist/ public/ && webpack && npm run dev",
-    "server": "node dist/bundle.js",
-    "build": "webpack",
+    "dev": "NODE_ENV=dev builder concurrent build:watch server:watch",
+    "server:watch": "nodemon dist/bundle.js",
     "build:watch": "webpack --watch",
+    "clean": "rm -rf dist/ public/ && webpack && npm run dev",
     "flow": "flow check",
     "precommit": "flow check && lint-staged"
   },
@@ -56,6 +55,7 @@
     "morgan": "^1.8.1",
     "prettier": "^1.2.2",
     "style-loader": "^0.17.0",
-    "webpack": "^2.4.1"
+    "webpack": "^2.4.1",
+    "webpack-hot-middleware": "^2.18.0"
   }
 }
