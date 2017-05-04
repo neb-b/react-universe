@@ -7,15 +7,11 @@ import App from './components/routes'
 import reducer from './redux/reducers'
 import css from './style/main.css'
 const isDev = process.env.NODE_ENV === 'dev'
-const routes = ['/', '/profile']
 
-export default (req: object, res) => {
+export default (object, res) => {
 	const store = createStore(reducer)
 	const preloadedState = store.getState()
 	const context = {}
-	const match = routes.reduce(
-		(acc, route) => matchPath(req.url, route, { exact: true }) || acc
-	)
 
 	const html = renderToString(
 		<Provider store={store}>
