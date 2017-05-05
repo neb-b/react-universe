@@ -32,10 +32,9 @@ export default (req, res) => {
       </head>
       <body>
         <div id="root" class="container">${html}</div>
-        ${isDev ? `
-					<script>
+        <script>
             window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
-          </script>` : ''}
+        </script>
         <script src="/public/bundle.js"></script>
       </body>
     </html>

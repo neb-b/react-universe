@@ -1,16 +1,27 @@
 import React from 'react'
 import { render } from 'react-dom'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
 import { BrowserRouter as Router } from 'react-router-dom'
 import App from './components/routes'
+import reducers from './redux/reducers'
 
 // Not sure about this
-// I think my styles will be small enough to include in initial render
-// Will keep an eye on it
-import css from './style/async.css'
+// styles will be fetched after first render
+// I think my styles will be small enough to send with html
+// import css from './style/async.css'
 
+const preloadedState = window.__PRELOADED_STATE__
+
+// Allow the passed state to be garbage-collected
+delete window.__PRELOADED_STATE__
+
+const store = createStore(reducers, preloadedState)
 render(
-	<Router>
-		<App />
-	</Router>,
+	<Provider store={store}>
+		<Router>
+			<App />
+		</Router>
+	</Provider>,
 	document.getElementById('root')
 )
