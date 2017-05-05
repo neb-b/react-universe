@@ -3,7 +3,7 @@ import { render } from 'react-dom'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router } from 'react-router-dom'
-import App from './components/routes'
+import App from './routes'
 import reducers from './redux/reducers'
 
 // Not sure about this
@@ -12,7 +12,7 @@ import reducers from './redux/reducers'
 // import css from './style/async.css'
 
 const preloadedState = window.__PRELOADED_STATE__
-
+console.log('preloadedState', preloadedState)
 // Allow the passed state to be garbage-collected
 delete window.__PRELOADED_STATE__
 

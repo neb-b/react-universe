@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Page from './page'
-import { AdminDashboard, AdminLogin } from '../admin'
+import { AdminDashboard, AdminLogin } from '../components/admin'
 
 const Admin = (props: { loggedIn: boolean }) => {
 	const { loggedIn } = props
