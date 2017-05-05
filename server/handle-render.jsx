@@ -3,19 +3,22 @@ import { renderToString } from 'react-dom/server'
 import { StaticRouter, matchPath, redirect } from 'react-router-dom'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
-import App from '../lib/routes'
+import App from '../lib/app'
 import reducers from '../lib/redux/reducers'
 import css from '../lib/style/main.css'
 import { getPosts } from './firebase'
-const isDev = process.env.NODE_ENV === 'dev'
 
 export default (req, res) => {
 	const url = req.url
-	const urlPieces = url.split('/')
-	const endpoint = urlPieces[urlPieces.length - 1]
+	const pieces = url.split('/')
+	const endpoint = pieces[pieces.length - 1]
+	const isBlogEndpoint = endpoint === 'blog'
+
+	// not doing anything with this right now
+	// may need if using <Redirect />
+	const context = {}
 
 	const renderHtml = preloadedState => {
-		const context = {}
 		const store = createStore(reducers, preloadedState)
 		const html = renderToString(
 			<Provider store={store}>
@@ -24,8 +27,9 @@ export default (req, res) => {
 				</StaticRouter>
 			</Provider>
 		)
+
 		const finalState = store.getState()
-		return res.send(
+		res.send(
 			`
 			<!doctype html>
 			<html>
@@ -36,7 +40,7 @@ export default (req, res) => {
 				<body>
 					<div id="root" class="container">${html}</div>
 					<script>
-						window.__PRELOADED_STATE__ = ${JSON.stringify(finalState).replace(/</g, '\\u003c')}
+							window.__PRELOADED_STATE__ = ${JSON.stringify(finalState).replace(/</g, '\\u003c')}
 					</script>
 					<script src="/public/bundle.js"></script>
 				</body>
@@ -45,11 +49,15 @@ export default (req, res) => {
 		)
 	}
 
-	if (endpoint === 'blog') {
-		getPosts().then(posts => {
-			const preloadedState = { blog: { posts } }
-			renderHtml(preloadedState)
-		})
+	if (isBlogEndpoint) {
+		getPosts()
+			.then(posts => {
+				const preloadedState = { blog: { posts } }
+				return renderHtml(preloadedState)
+			})
+			.catch(err => {
+				return res.send(err.message)
+			})
 	} else {
 		renderHtml()
 	}

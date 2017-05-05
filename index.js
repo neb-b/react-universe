@@ -1,7 +1,7 @@
 import express from 'express'
 import morgan from 'morgan'
-import handleRender from './render-html'
-import api from './routes'
+import handleRender from './server/handle-render'
+import api from './server/routes'
 
 const app = express()
 const PORT = process.env.port || 3000
