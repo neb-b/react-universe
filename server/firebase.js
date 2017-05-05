@@ -17,7 +17,9 @@ export const getPosts = () => {
 			'value',
 			snapshot => {
 				const posts = snapshot.val()
-				resolve(posts)
+				// [0] is empty, not sure why
+				const actualListOfPosts = posts.slice(1)
+				resolve(actualListOfPosts)
 			},
 			err => {
 				reject(err)

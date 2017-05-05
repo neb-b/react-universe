@@ -2,9 +2,9 @@
 
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import Home from './pages/home'
-import Blog from './pages/blog'
-import Admin from './pages/admin'
+import Home from './pages/home.page'
+import Blog from './pages/blog.page'
+import Admin from './pages/admin.page'
 
 const App = () => {
 	return (

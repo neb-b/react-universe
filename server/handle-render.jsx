@@ -3,9 +3,9 @@ import { renderToString } from 'react-dom/server'
 import { StaticRouter, matchPath, redirect } from 'react-router-dom'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
-import App from '../lib/app'
-import reducers from '../lib/redux/reducers'
-import css from '../lib/style/main.css'
+import App from '../client/app'
+import reducers from '../client/redux/reducers'
+import css from '../client/style/main.css'
 import { getPosts } from './firebase'
 
 export default (req, res) => {

@@ -7,7 +7,7 @@ const FlowBabelWebpackPlugin = require('flow-babel-webpack-plugin');
 module.exports = [
 	{
 		target: 'web',
-		entry: './lib/client.jsx',
+		entry: './client/client.jsx',
 		output: {
 			path: path.resolve(__dirname, 'public'),
 			publicPath: 'public/',
