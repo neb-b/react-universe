@@ -2,12 +2,13 @@
 
 import React from 'react'
 import Page from './page'
+import AdminDashboard from '../components/dashboard'
 
 const Admin = (props: { loggedIn: boolean }) => {
 	const { loggedIn } = props
 	return (
 		<Page>
-			<h1>Admin</h1>
+			<AdminDashboard loggedIn={loggedIn} />
 		</Page>
 	)
 }

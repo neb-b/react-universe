@@ -10,9 +10,21 @@
 body {
   font-family: Helvetica;
   padding: 50px;
-  background-color: orange;
+  background-color: #4b6a48;
 }
 
 a {
   padding-right: 10px;
+}
+
+form {
+  padding-top: 40px;
+}
+
+input {
+  margin-left: 10px;
+}
+
+button {
+  margin-left: 10px;
 }
