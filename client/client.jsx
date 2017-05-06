@@ -8,26 +8,24 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import App from './app'
 import reducers from './redux/reducers'
 
-// Not sure about this
-// styles will be fetched after first render
+// Not sure about adding async css
 // I think my styles will be small enough to send with html
 // import css from './style/async.css'
 
 const loggerMiddleware = createLogger()
 const preloadedState = window.__PRELOADED_STATE__
-console.log('preloadedState', preloadedState)
-// Allow the passed state to be garbage-collected
 delete window.__PRELOADED_STATE__
 
+console.log('preloadedState', preloadedState)
 
+const reduxMiddleware = __DEV__
+	? applyMiddleware(thunkMiddleware, loggerMiddleware)
+	: applyMiddleware(thunkMiddleware)
 
 const store = createStore(
 	reducers,
 	preloadedState,
-	applyMiddleware(
-		thunkMiddleware, // lets us dispatch() functions
-		loggerMiddleware // neat middleware that logs actions
-	)
+	reduxMiddleware
 )
 
 render(

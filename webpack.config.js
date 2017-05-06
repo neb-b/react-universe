@@ -34,6 +34,11 @@ module.exports = [
 				}
 			]
 		},
+		plugins: [
+			new webpack.DefinePlugin({
+				'__DEV__': process.env.NODE_ENV === 'dev'
+			})
+		],
 		resolve: {
 			extensions: ['.js', '.jsx']
 		}
