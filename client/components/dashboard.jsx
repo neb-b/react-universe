@@ -1,14 +1,24 @@
 // @flow
 
 import React from 'react'
-import Login from './dashboard/login.connected'
 
-const Dashboard = (props: { loggedIn: boolean }) => {
-  const { loggedIn } = props
+const Dashboard = (props: { posts: Array<object> }) => {
+  const { posts } = props
   return (
     <div>
-      {!loggedIn && <Login />}
-      {loggedIn && <h1>Dashboard</h1>}
+      <h1>Dashboard</h1>
+      <div>
+        <h2>Posts</h2>
+          {posts.map((post: { title: string, text: string }, index) => {
+            const { title, text } = post
+            return (
+              <div key={index}>
+                <h2>{title}</h2>
+                <span>{text}</span>
+              </div>
+            )
+          })}
+      </div>
     </div>
   )
 }

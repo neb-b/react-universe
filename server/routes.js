@@ -1,17 +1,8 @@
 import express from 'express'
-import { getPosts } from './firebase'
+import { login, getPublicPosts } from './handlers'
 const Router = express.Router()
 
-const fetchBlogPosts = (req, res) => {
-	getPosts()
-		.then(posts => {
-			return res.send(JSON.stringify({ posts }))
-		})
-		.catch(err => {
-			return res.send(err.message)
-		})
-}
-
-Router.get('/posts', fetchBlogPosts)
+Router.post('/login', login)
+Router.get('/posts', getPublicPosts)
 
 export default Router

@@ -6,9 +6,10 @@ import {
 } from '../constants'
 
 const initialState = {
-	loggedIn: false,
 	loading: false,
-	error: null
+	error: null,
+	loggedIn: false,
+	posts: []
 }
 
 export default handleActions({
@@ -16,7 +17,8 @@ export default handleActions({
 	[LOGIN_SUCCESS]: (state, { payload: { posts } }) => ({
 		...state,
 		loading: false,
-		loggedIn: true
+		loggedIn: true,
+		posts
 	}),
 	[LOGIN_ERROR]: (state, { payload }) => ({
 		...state,

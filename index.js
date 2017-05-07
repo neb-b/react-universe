@@ -1,8 +1,10 @@
 import express from 'express'
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 import handleRender from './server/handle-render'
 import api from './server/routes'
+
 
 const app = express()
 const PORT = process.env.port || 3000
@@ -10,6 +12,7 @@ const PORT = process.env.port || 3000
 app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cookieParser());
 app.use('/public', express.static('public'))
 app.use('/api', api)
 

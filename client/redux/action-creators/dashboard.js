@@ -12,12 +12,11 @@ const onLoginSuccess = createAction(LOGIN_SUCCESS)
 const onLoginError = createAction(LOGIN_ERROR)
 
 // called from redux-form so a little different than react-redux bindings
-export function login({email, password}, dispatch) {
+export function login(userLoginObj, dispatch) {
   dispatch(onLoginRequest())
-  return axios.post(`${ROOT_URL}/login`)
-    .then((res) => {
-      console.log('res', res);
-      dispatch(onLoginSuccess())
+  return axios.post(`${ROOT_URL}/login`, { ...userLoginObj })
+    .then(({ data: { posts } }) => {
+      dispatch(onLoginSuccess({ posts }))
     })
     .catch((err) => dispatch(onLoginError(err)))
 }
