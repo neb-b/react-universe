@@ -2,21 +2,21 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
+import { viewPosts, viewAnalytics } from '../redux/action-creators/dashboard'
 import Page from './page'
 import AdminDashboard from '../components/dashboard'
 import Login from '../components/dashboard/login.connected'
 
-const Admin = (props: { loggedIn: boolean, posts: Array<Object>, loading: boolean  }) => {
-	const { loggedIn, posts, loading } = props
+const Admin = (props: { loggedIn: boolean, loading: boolean  }) => {
+	const { loggedIn, loading } = props
 	return (
 		<Page>
-			{loading && <div>Loading...</div>}
-			{!loggedIn && <Login />}
-			{loggedIn && <AdminDashboard posts={posts} />}
+			{!loggedIn && <Login loading={loading} />}
+			{loggedIn && <AdminDashboard {...props} />}
 		</Page>
 	)
 }
 
 const mapStateToProps = (s) => ({ ...s.dashboard })
 
-export default connect(mapStateToProps, null)(Admin)
+export default connect(mapStateToProps, { viewPosts, viewAnalytics })(Admin)

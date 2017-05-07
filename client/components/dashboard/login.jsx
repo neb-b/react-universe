@@ -8,11 +8,11 @@ const renderField = ({ input, label, type }) => (
   </div>
 )
 
-const Login = (props: { }) => {
-  const { handleSubmit, submit } = props
-  // console.log('props', props);
+const Login = (props) => {
+  const { handleSubmit, submit, loading } = props
   return (
     <form onSubmit={handleSubmit(submit)}>
+      {loading && <div>Loading...</div>}
       <Field name="email" label="Email" component={renderField} />
       <Field name="password" type="password" label="Password" component={renderField} />
       <button>Login</button>
