@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-const Dashboard = (props: { posts: Array<object> }) => {
+const Dashboard = (props: { posts: Array<Object> }) => {
   const { posts } = props
   return (
     <div>

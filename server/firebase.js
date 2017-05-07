@@ -54,7 +54,7 @@ export const getPublicPosts = () => {
 	})
 }
 
-export const getAllPosts = () => {
+export const getDashboard = () => {
 	return new Promise((resolve, reject) => {
 		// check if logged in, then get all posts
 		const db = admin.database().ref('blog/posts')

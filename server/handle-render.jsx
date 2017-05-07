@@ -6,9 +6,38 @@ import { Provider } from 'react-redux'
 import App from '../client/app'
 import reducers from '../client/redux/reducers'
 import css from '../client/style/main.css'
-import { getPublicPosts, getAllPosts, authorize } from './firebase'
+import { getPublicPosts, getDashboard, authorize } from './firebase'
 
-export default (req, res) => {
+const createHtml = (url, preloadedState) => {
+	const store = createStore(reducers, preloadedState)
+	const html = renderToString(
+		<Provider store={store}>
+			<StaticRouter location={url} context={{}}>
+				<App />
+			</StaticRouter>
+		</Provider>
+	)
+
+	const finalState = store.getState()
+	return `
+		<!doctype html>
+		<html>
+			<head>
+				<title>React Universe</title>
+				<style>${css.toString()}</style>
+			</head>
+			<body>
+				<div id="root" class="container">${html}</div>
+				<script>
+						window.__PRELOADED_STATE__ = ${JSON.stringify(finalState).replace(/</g, '\\u003c')}
+				</script>
+				<script src="/public/bundle.js"></script>
+			</body>
+		</html>
+	`
+}
+
+export default function handleRender(req, res) {
 	const url = req.url
 	const pieces = url.split('/')
 	const endpoint = pieces[pieces.length - 1]
@@ -16,47 +45,16 @@ export default (req, res) => {
 	const isAdminEndpoint = endpoint === 'admin'
 	const { cookies: { auth: authToken } } = req
 
-	// not doing anything with this right now
-	// may need if using <Redirect />
-	const context = {}
-
-	const renderHtml = preloadedState => {
-		console.log('\n renderhtml', preloadedState)
-		const store = createStore(reducers, preloadedState)
-		const html = renderToString(
-			<Provider store={store}>
-				<StaticRouter location={req.url} context={context}>
-					<App />
-				</StaticRouter>
-			</Provider>
-		)
-
-		const finalState = store.getState()
-		res.send(
-			`
-			<!doctype html>
-			<html>
-				<head>
-					<title>React Universe</title>
-					<style>${css.toString()}</style>
-				</head>
-				<body>
-					<div id="root" class="container">${html}</div>
-					<script>
-							window.__PRELOADED_STATE__ = ${JSON.stringify(finalState).replace(/</g, '\\u003c')}
-					</script>
-					<script src="/public/bundle.js"></script>
-				</body>
-			</html>
-			`
-		)
+	const sendHtml = preloadedState => {
+		const html = createHtml(url, preloadedState)
+		res.send(html)
 	}
 
 	if (isBlogEndpoint) {
 		getPublicPosts()
 			.then(posts => {
 				const preloadedState = { blog: { posts } }
-				return renderHtml(preloadedState)
+				return sendHtml(preloadedState)
 			})
 			.catch(err => {
 				return res.send(err.message)
@@ -67,23 +65,23 @@ export default (req, res) => {
 		authorize(authToken)
 			.then(res => {
 				// user is authorized
-				getAllPosts()
+				getDashboard()
 					.then(posts => {
 						const preloadedState = { dashboard: { posts, loggedIn: true } }
-						renderHtml(preloadedState)
+						sendHtml(preloadedState)
 					})
 					.catch(err => {
 						// not signed in
 						// don't preload state, show login on /admin
-						renderHtml()
+						sendHtml()
 					})
 			})
 			.catch(() => {
 				// problem with users auth token
 				res.cookie('auth', null)
-				renderHtml()
+				sendHtml()
 			})
 	} else {
-		renderHtml()
+		sendHtml()
 	}
 }

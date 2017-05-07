@@ -1,4 +1,4 @@
-import { login, getAllPosts } from '../firebase'
+import { login, getDashboard } from '../firebase'
 
 export default (req, res) => {
 	const user = req.body
@@ -7,15 +7,13 @@ export default (req, res) => {
 			// set cookie
 			res.cookie('auth', token)
 
-			// if valid credentials, getAllPosts
-			getAllPosts().then(posts => {
-				console.log('gotem', posts)
+			// if valid credentials, getDashboard
+			getDashboard().then(posts => {
 				return res.send({ posts })
 			})
 		})
 		.catch(err => {
 			// not logged in
-			console.log('err', err)
-			res.sendStatus(400)
+			res.send({ err }).status(400)
 		})
 }
