@@ -4,15 +4,18 @@ import {
 	LOGIN_SUCCESS,
 	LOGIN_ERROR,
 	VIEW_POSTS,
-	VIEW_ANALYTICS
+	CREATE_POST_REQUEST,
+	CREATE_POST_SUCCESS,
+	CREATE_POST_ERROR,
+	STOP_EDITING
 } from '../constants'
 
 const initialState = {
 	loading: false,
 	error: null,
 	loggedIn: false,
-	viewingAnalytics: true,
-	viewingPosts: false,
+	isEditing: false,
+	postEditing: null,
 	posts: []
 }
 
@@ -29,14 +32,17 @@ export default handleActions({
 		loading: false,
 		error: payload
 	}),
-	[VIEW_POSTS]: (state, { payload }) => ({
+	[CREATE_POST_REQUEST]: (state, { payload }) => ({
 		...state,
-		viewingPosts: true,
-		currentlyEditing: false
+		// will be like a fullscreen modal, so don't have to reset other props
+		isEditing: true
 	}),
-	[VIEW_ANALYTICS]: (state, { payload }) => ({
+	[CREATE_POST_SUCCESS]: (state, { payload: { posts } }) => ({
 		...state,
-		viewingPosts: false,
-		viewingAnalytics: true
+		posts
+	}),
+	[STOP_EDITING]: (state, { payload }) => ({
+		...state,
+		isEditing: false
 	})
 }, initialState)

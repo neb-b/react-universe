@@ -2,6 +2,7 @@ import * as admin from 'firebase-admin'
 import * as firebase from 'firebase'
 import adminConfig from '../firebase-admin.config.json'
 import config from '../firebase.config.json'
+import uuid from 'uuid/v4'
 
 admin.initializeApp({
 	credential: admin.credential.cert(adminConfig),
@@ -37,16 +38,19 @@ export const authorize = authToken => {
 
 export const getPublicPosts = () => {
 	return new Promise((resolve, reject) => {
-		const db = admin.database().ref('blog/posts')
+		const db = admin.database().ref('posts')
 
 		return db
 			.once('value')
 			.then(snapshot => {
 				const posts = snapshot.val()
-				// [0] is empty, not sure why
-				const actualListOfPosts = posts.slice(1)
-				const publicPosts = posts.filter(post => !post.published)
-				resolve(actualListOfPosts)
+				let listOfPosts = []
+				for (var key in posts) {
+					if (posts[key].published) {
+						listOfPosts.push(posts[key])
+					}
+				}
+				resolve(listOfPosts)
 			})
 			.catch(err => {
 				reject(err)
@@ -57,18 +61,37 @@ export const getPublicPosts = () => {
 export const getDashboard = () => {
 	return new Promise((resolve, reject) => {
 		// check if logged in, then get all posts
-		const db = admin.database().ref('blog/posts')
+		const db = admin.database().ref('posts')
 		return db
 			.once('value')
 			.then(snapshot => {
 				const posts = snapshot.val()
-				// [0] is empty, not sure why
-				const actualListOfPosts = posts.slice(1)
-				resolve(actualListOfPosts)
+				let listOfPosts = []
+				for (var key in posts) {
+					listOfPosts.push(posts[key])
+				}
+				console.log('posts', listOfPosts)
+				resolve(listOfPosts)
 			})
 			.catch(err => {
 				console.log('error', err)
 				reject(err)
 			})
+	})
+}
+
+export const createPost = () => {
+	const db = admin.database()
+	const postId = uuid()
+	console.log('creating...')
+	const newPost = {
+		id: postId,
+		dateCreated: new Date().toISOString(),
+		title: 'untitled',
+		published: false
+	}
+
+	return new Promise((resolve, reject) => {
+		return db.ref(`posts/${postId}`).set(newPost).then(() => resolve(newPost))
 	})
 }

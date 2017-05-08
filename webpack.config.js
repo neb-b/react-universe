@@ -13,6 +13,7 @@ module.exports = [
 			publicPath: 'public/',
 			filename: 'bundle.js'
 		},
+		devtool: 'inline-source-map',
 		module: {
 			rules: [
 				{
@@ -52,6 +53,7 @@ module.exports = [
 			publicPath: 'dist/',
 			filename: 'bundle.js'
 		},
+		devtool: 'inline-source-map',
 		module: {
 			rules: [
 				{

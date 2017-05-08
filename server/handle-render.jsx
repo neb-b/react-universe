@@ -67,7 +67,9 @@ export default function handleRender(req, res) {
 				// user is authorized
 				getDashboard()
 					.then(posts => {
-						const preloadedState = { dashboard: { posts, loggedIn: true } }
+						const preloadedState = {
+							dashboard: { posts, loggedIn: true, viewingPosts: true }
+						}
 						sendHtml(preloadedState)
 					})
 					.catch(err => {

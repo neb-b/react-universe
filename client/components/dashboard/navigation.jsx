@@ -1,10 +1,10 @@
 import React from 'react'
+import Button from '../common/button'
 
-const Navigation = ({ viewPosts, viewAnalytics }) => {
+const Navigation = ({ viewPosts, createPost }) => {
   return (
     <div>
-      <button onClick={viewAnalytics}>View analytics</button>
-      <button onClick={viewPosts}>View posts</button>
+      <Button onClick={createPost}>Create new post</Button>
     </div>
   )
 }
