@@ -50,6 +50,6 @@ export default handleActions({
 	[STOP_EDIT]: (state, { payload }) => ({
 		...state,
 		isEditing: false,
-		activeEditPost: null
+		activeEditPost: {}
 	})
 }, initialState)

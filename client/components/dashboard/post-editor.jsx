@@ -14,7 +14,7 @@ class NewPostEditor extends Component {
         </div>
         <div>
           <h1>{title || 'untitled'}</h1>
-          <h2>Created on {moment(dateCreated).format()}</h2>
+          <h2>Created on {moment(dateCreated).format() || ""}</h2>
 
         </div>
         <div>
