@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/seanyesmunt/react-universe#readme",
   "lint-staged": {
-    "{lib,server}/**/*.{jsx,js}": [
+    "{client,server}/**/*.{jsx,js}": [
       "prettier --no-semi --use-tabs --single-quote --write",
       "git add"
     ]
