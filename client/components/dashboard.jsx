@@ -1,8 +1,9 @@
 
 
 import React from 'react'
-import Navigation from './dashboard/navigation'
+import moment from 'moment'
 import PostEditor from './dashboard/post-editor'
+import Button from './common/button'
 
 const Dashboard = (props: { posts: Array<Object> }) => {
   const {
@@ -11,27 +12,29 @@ const Dashboard = (props: { posts: Array<Object> }) => {
     viewPosts,
     createPost,
     isEditing,
-    stopEditing
+    stopEditing,
+    editPost,
+    activeEditPost
   } = props
   return (
     <div className="dashboard-wrapper">
-      <Navigation viewPosts={viewPosts} createPost={createPost} />
+      {!isEditing && <Button onClick={createPost}>Create new post</Button>}
       <div className="dashboard-content">
         {!isEditing && (
           <div>
-            {posts.map((post: { title: string, text: string }, index) => {
-              const { title, text } = post
+            {posts.map((post: { title: string, dateCreated: string }, index) => {
+              const { title, dateCreated } = post
               return (
-                <div key={index}>
-                  <h2>{title}</h2>
-                  <span>{text}</span>
+                <div key={index} onClick={() => editPost(post)}>
+                  <h2>{title || 'untitled'}</h2>
+                  <span>{moment(dateCreated).format()}</span>
                 </div>
               )
             })}
           </div>
         )}
         {isEditing && (
-          <PostEditor stopEditing={stopEditing} />
+          <PostEditor stopEditing={stopEditing} activeEditPost={activeEditPost} />
         )}
       </div>
     </div>

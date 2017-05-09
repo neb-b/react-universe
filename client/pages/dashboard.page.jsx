@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import { viewPosts, createPost, stopEditing } from '../redux/action-creators/dashboard'
+import { viewPosts, createPost, stopEditing, editPost } from '../redux/action-creators/dashboard'
 import Page from './page'
 import AdminDashboard from '../components/dashboard'
 import Login from '../components/dashboard/login.connected'
@@ -19,4 +19,4 @@ const Admin = (props: { loggedIn: boolean, loading: boolean  }) => {
 
 const mapStateToProps = (s) => ({ ...s.dashboard })
 
-export default connect(mapStateToProps, { viewPosts, createPost, stopEditing })(Admin)
+export default connect(mapStateToProps, { viewPosts, createPost, stopEditing, editPost })(Admin)

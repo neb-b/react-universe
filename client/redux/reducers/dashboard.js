@@ -7,16 +7,17 @@ import {
 	CREATE_POST_REQUEST,
 	CREATE_POST_SUCCESS,
 	CREATE_POST_ERROR,
-	STOP_EDITING
+	STOP_EDIT,
+	START_EDIT
 } from '../constants'
 
 const initialState = {
 	loading: false,
 	error: null,
 	loggedIn: false,
+	posts: [],
 	isEditing: false,
-	postEditing: null,
-	posts: []
+	activeEditPost: {}
 }
 
 export default handleActions({
@@ -41,8 +42,14 @@ export default handleActions({
 		...state,
 		posts
 	}),
-	[STOP_EDITING]: (state, { payload }) => ({
+	[START_EDIT]: (state, { payload: { post }}) => ({
 		...state,
-		isEditing: false
+		isEditing: true,
+		activeEditPost: post
+	}),
+	[STOP_EDIT]: (state, { payload }) => ({
+		...state,
+		isEditing: false,
+		activeEditPost: null
 	})
 }, initialState)

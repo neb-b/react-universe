@@ -7,7 +7,8 @@ import {
   CREATE_POST_REQUEST,
   CREATE_POST_SUCCESS,
   CREATE_POST_ERROR,
-  STOP_EDITING
+  STOP_EDIT,
+  START_EDIT
 } from '../constants'
 import { createAction } from 'redux-actions'
 import axios from 'axios'
@@ -19,7 +20,8 @@ const onCreatePostRequest = createAction(CREATE_POST_REQUEST)
 const onCreatePostSuccess = createAction(CREATE_POST_SUCCESS)
 const onCreatePostError = createAction(CREATE_POST_ERROR)
 const onViewPosts = createAction(VIEW_POSTS)
-const onStopEditing = createAction(STOP_EDITING)
+const onBeginEdit = createAction(START_EDIT)
+const onStopEdit = createAction(STOP_EDIT)
 
 // called from redux-form so a little different than react-redux bindings
 export function login(userLoginObj, dispatch) {
@@ -47,6 +49,12 @@ export function createPost() {
   }
 }
 
+export function editPost(post) {
+  return (dispatch) => {
+    dispatch(onBeginEdit({ post }))
+  }
+}
+
 export function stopEditing() {
-  return dispatch => dispatch(onStopEditing())
+  return dispatch => dispatch(onStopEdit())
 }

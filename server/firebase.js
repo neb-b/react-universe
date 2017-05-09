@@ -87,7 +87,6 @@ export const createPost = () => {
 	const newPost = {
 		id: postId,
 		dateCreated: new Date().toISOString(),
-		title: 'untitled',
 		published: false
 	}
 
