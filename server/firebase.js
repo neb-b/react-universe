@@ -97,23 +97,17 @@ export const createPost = () => {
 	})
 }
 
-export const publishPost = postId => {
-	const db = admin.database().ref(`posts/${postId}`)
-	console.log('publishing...')
+export const updatePost = newPost => {
+	const db = admin.database().ref(`posts/${newPost.id}`)
 
 	return new Promise((resolve, reject) => {
 		return db
 			.once('value')
 			.then(snapshot => {
-				console.log('snapshot', snapshot.val())
 				const post = snapshot.val()
-				const newPost = Object.assign({}, post, {
-					published: true,
-					datePublished: new Date().toISOString()
-				})
-				return db.set(newPost).then(() => {
-					resolve(newPost)
-				})
+				console.log('old post', post)
+				console.log('newpost', newPost)
+				return db.set(newPost).then(() => resolve(newPost))
 			})
 			.catch(err => reject(err))
 	})

@@ -3,13 +3,26 @@ import Button from '../common/button'
 import moment from 'moment'
 
 class NewPostEditor extends Component {
+	//TODO
+	// move datePublished logic out of component
+
 	render() {
-		const { stopEditing, publish, activeEditPost = {} } = this.props
-		const { dateCreated, title, body, id } = activeEditPost
+		const { stopEditing, update, activeEditPost = {} } = this.props
+		const { dateCreated, title, body, id, published } = activeEditPost
 		return (
 			<div>
 				<div>
-					<Button onClick={() => publish(id)}>Publish</Button>
+					<Button
+						onClick={() =>
+							update(
+								Object.assign({}, activeEditPost, {
+									published: !published,
+									datePublished: new Date().toISOString()
+								})
+							)}
+					>
+						{published ? 'un publish' : 'publish'}
+					</Button>
 					<Button onClick={stopEditing}>Back to posts</Button>
 				</div>
 				<div>

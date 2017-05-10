@@ -9,9 +9,9 @@ import {
 	CREATE_POST_ERROR,
 	STOP_EDIT,
 	START_EDIT,
-	PUBLISH_POST_REQUEST,
-	PUBLISH_POST_SUCCESS,
-	PUBLISH_POST_ERROR
+	UPDATE_POST_REQUEST,
+	UPDATE_POST_SUCCESS,
+	UPDATE_POST_ERROR
 } from '../constants'
 import { createAction } from 'redux-actions'
 import axios from 'axios'
@@ -25,9 +25,9 @@ const onCreatePostError = createAction(CREATE_POST_ERROR)
 const onViewPosts = createAction(VIEW_POSTS)
 const onBeginEdit = createAction(START_EDIT)
 const onStopEdit = createAction(STOP_EDIT)
-const onPublishPostRequest = createAction(PUBLISH_POST_REQUEST)
-const onPublishPostSuccess = createAction(PUBLISH_POST_SUCCESS)
-const onPublishPostError = createAction(PUBLISH_POST_ERROR)
+const onUpdatePostRequest = createAction(UPDATE_POST_REQUEST)
+const onUpdatePostSuccess = createAction(UPDATE_POST_SUCCESS)
+const onUpdatePostError = createAction(UPDATE_POST_ERROR)
 
 // called from redux-form so a little different than react-redux bindings
 export function login(userLoginObj, dispatch) {
@@ -67,22 +67,19 @@ export function stopEditing() {
 	return dispatch => dispatch(onStopEdit())
 }
 
-export function publishPost(id) {
-	return (dispatch, getState) => {
-		dispatch(onPublishPostRequest())
+export function updatePost(post) {
+	return dispatch => {
+		dispatch(onUpdatePostRequest())
 		return axios
-			.put(`${ROOT_URL}/posts/${id}/publish`)
-			.then(({ newPost }) => {
-				const state = getState()
-				const newPosts = state.dashboard.posts.map(
-					post => (post.id === id ? newPost : post)
-				)
-				dispatch(onPublishPostSuccess({ posts: newPosts }))
+			.put(`${ROOT_URL}/posts/${post.id}/update`, { post })
+			.then(({ data: { newPost } }) => {
+				console.log('')
+				dispatch(onUpdatePostSuccess({ newPost }))
 			})
 			.catch(err => {
-				dispatch(onPublishPostError(err))
+				dispatch(onUpdatePostError(err))
 			})
 	}
 }
 
-export function unPublishPost() {}
+export function unUpdatePost() {}

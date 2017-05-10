@@ -8,7 +8,8 @@ import {
 	CREATE_POST_SUCCESS,
 	CREATE_POST_ERROR,
 	STOP_EDIT,
-	START_EDIT
+	START_EDIT,
+	UPDATE_POST_SUCCESS
 } from '../constants'
 
 const initialState = {
@@ -20,36 +21,46 @@ const initialState = {
 	activeEditPost: {}
 }
 
-export default handleActions({
-	[LOGIN_REQUEST]: (state) => ({ ...state, loading: true }),
-	[LOGIN_SUCCESS]: (state, { payload: { posts } }) => ({
-		...state,
-		loading: false,
-		loggedIn: true,
-		posts
-	}),
-	[LOGIN_ERROR]: (state, { payload }) => ({
-		...state,
-		loading: false,
-		error: payload
-	}),
-	[CREATE_POST_REQUEST]: (state, { payload }) => ({
-		...state,
-		// will be like a fullscreen modal, so don't have to reset other props
-		isEditing: true
-	}),
-	[CREATE_POST_SUCCESS]: (state, { payload: { posts } }) => ({
-		...state,
-		posts
-	}),
-	[START_EDIT]: (state, { payload: { post }}) => ({
-		...state,
-		isEditing: true,
-		activeEditPost: post
-	}),
-	[STOP_EDIT]: (state, { payload }) => ({
-		...state,
-		isEditing: false,
-		activeEditPost: {}
-	})
-}, initialState)
+export default handleActions(
+	{
+		[LOGIN_REQUEST]: state => ({ ...state, loading: true }),
+		[LOGIN_SUCCESS]: (state, { payload: { posts } }) => ({
+			...state,
+			loading: false,
+			loggedIn: true,
+			posts
+		}),
+		[LOGIN_ERROR]: (state, { payload }) => ({
+			...state,
+			loading: false,
+			error: payload
+		}),
+		[CREATE_POST_REQUEST]: (state, { payload }) => ({
+			...state,
+			// will be like a fullscreen modal, so don't have to reset other props
+			isEditing: true
+		}),
+		[CREATE_POST_SUCCESS]: (state, { payload: { posts } }) => ({
+			...state,
+			posts
+		}),
+		[START_EDIT]: (state, { payload: { post } }) => ({
+			...state,
+			isEditing: true,
+			activeEditPost: post
+		}),
+		[STOP_EDIT]: (state, { payload }) => ({
+			...state,
+			isEditing: false,
+			activeEditPost: {}
+		}),
+		[UPDATE_POST_SUCCESS]: (state, { payload }) => ({
+			...state,
+			activeEditPost: payload.newPost,
+			posts: state.posts.map(
+				post => (post.id === payload.newPost.id ? payload.newPost : post)
+			)
+		})
+	},
+	initialState
+)

@@ -1,14 +1,15 @@
-import { authorize, publishPost } from '../firebase'
+import { authorize, updatePost } from '../firebase'
 
 export default (req, res) => {
 	const id = req.params.id
+	const post = req.body.post
 	const { cookies: { auth: authToken } } = req
 	if (!authToken) {
 		return res.redirect('http://localhost:3000')
 	}
 
 	authorize(authToken)
-		.then(() => publishPost(id))
+		.then(() => updatePost(post))
 		.then(newPost => {
 			console.log('response', newPost)
 			res.send({ newPost })

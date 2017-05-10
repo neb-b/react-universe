@@ -7,14 +7,15 @@ import {
 	CREATE_POST_REQUEST,
 	CREATE_POST_SUCCESS,
 	CREATE_POST_ERROR,
-  START_EDIT,
+	START_EDIT,
 	STOP_EDIT
 } from '../constants'
 
 const initialState = {
-  title: '',
-  text: '',
-  dateCreated: '',
-  isPublished: null,
-  lastEdited: null
+	title: '',
+	text: '',
+	dateCreated: '',
+	datePublished: '',
+	isPublished: null,
+	lastEdited: null
 }

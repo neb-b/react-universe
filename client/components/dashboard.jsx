@@ -13,7 +13,7 @@ const Dashboard = (props: { posts: Array<Object> }) => {
 		stopEditing,
 		editPost,
 		activeEditPost,
-		publishPost
+		updatePost
 	} = props
 	return (
 		<div className="dashboard-wrapper">
@@ -37,7 +37,7 @@ const Dashboard = (props: { posts: Array<Object> }) => {
 					<PostEditor
 						stopEditing={stopEditing}
 						activeEditPost={activeEditPost}
-						publish={publishPost}
+						update={updatePost}
 					/>}
 			</div>
 		</div>
