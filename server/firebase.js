@@ -46,10 +46,12 @@ export const getPublicPosts = () => {
 				const posts = snapshot.val()
 				let listOfPosts = []
 				for (var key in posts) {
+					console.log('testing', posts[key])
 					if (posts[key].published) {
 						listOfPosts.push(posts[key])
 					}
 				}
+				console.log('listofpost', listOfPosts)
 				resolve(listOfPosts)
 			})
 			.catch(err => {
@@ -92,5 +94,27 @@ export const createPost = () => {
 
 	return new Promise((resolve, reject) => {
 		return db.ref(`posts/${postId}`).set(newPost).then(() => resolve(newPost))
+	})
+}
+
+export const publishPost = postId => {
+	const db = admin.database().ref(`posts/${postId}`)
+	console.log('publishing...')
+
+	return new Promise((resolve, reject) => {
+		return db
+			.once('value')
+			.then(snapshot => {
+				console.log('snapshot', snapshot.val())
+				const post = snapshot.val()
+				const newPost = Object.assign({}, post, {
+					published: true,
+					datePublished: new Date().toISOString()
+				})
+				return db.set(newPost).then(() => {
+					resolve(newPost)
+				})
+			})
+			.catch(err => reject(err))
 	})
 }
