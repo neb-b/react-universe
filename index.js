@@ -5,7 +5,6 @@ import cookieParser from 'cookie-parser'
 import handleRender from './server/handle-render'
 import api from './server/routes'
 
-
 const app = express()
 const PORT = process.env.port || 3000
 
