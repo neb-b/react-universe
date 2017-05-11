@@ -4,9 +4,10 @@
   "description": "Universal React/Redux starter",
   "main": "src/server.js",
   "scripts": {
-    "start": "webpack -p && node dist/bundle.js",
+    "start": "node dist/bundle.js",
     "dev": "NODE_ENV=dev builder concurrent build:watch server:watch",
     "server:watch": "nodemon dist/bundle.js",
+    "now-build": "webpack -p",
     "build:watch": "webpack --watch",
     "clean": "rm -rf dist/ public/ && webpack",
     "flow": "flow check",
