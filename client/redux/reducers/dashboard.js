@@ -9,7 +9,10 @@ import {
 	CREATE_POST_ERROR,
 	STOP_EDIT,
 	START_EDIT,
-	UPDATE_POST_SUCCESS
+	UPDATE_POST_SUCCESS,
+	DELETE_POST_REQUEST,
+	DELETE_POST_SUCCESS,
+	DELETE_POST_ERROR
 } from '../constants'
 
 const initialState = {
@@ -18,7 +21,8 @@ const initialState = {
 	loggedIn: false,
 	posts: [],
 	isEditing: false,
-	activeEditPost: {}
+	activeEditPost: {},
+	justDeleted: false
 }
 
 export default handleActions(
@@ -60,6 +64,19 @@ export default handleActions(
 			posts: state.posts.map(
 				post => (post.id === payload.newPost.id ? payload.newPost : post)
 			)
+		}),
+		[DELETE_POST_REQUEST]: state => ({ ...state, loading: true }),
+		[DELETE_POST_SUCCESS]: (state, { payload: { id } }) => ({
+			...state,
+			loading: false,
+			isEditing: false,
+			justDeleted: true,
+			posts: state.posts.filter(post => post.id !== id)
+		}),
+		[DELETE_POST_ERROR]: (state, { payload }) => ({
+			...state,
+			loading: false,
+			error: payload
 		})
 	},
 	initialState

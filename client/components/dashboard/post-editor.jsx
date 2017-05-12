@@ -7,14 +7,19 @@ class NewPostEditor extends Component {
 	// move datePublished logic out of component
 
 	render() {
-		const { stopEditing, update, activeEditPost = {} } = this.props
+		const {
+			stopEditing,
+			updatePost,
+			deletePost,
+			activeEditPost = {}
+		} = this.props
 		const { dateCreated, title, body, id, published } = activeEditPost
 		return (
 			<div>
 				<div>
 					<Button
 						onClick={() =>
-							update(
+							updatePost(
 								Object.assign({}, activeEditPost, {
 									published: !published,
 									datePublished: new Date().toISOString()
@@ -23,6 +28,7 @@ class NewPostEditor extends Component {
 					>
 						{published ? 'un publish' : 'publish'}
 					</Button>
+					<Button onClick={() => deletePost(id)}>Delete</Button>
 					<Button onClick={stopEditing}>Back to posts</Button>
 				</div>
 				<div>

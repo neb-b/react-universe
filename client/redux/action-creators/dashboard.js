@@ -11,7 +11,10 @@ import {
 	START_EDIT,
 	UPDATE_POST_REQUEST,
 	UPDATE_POST_SUCCESS,
-	UPDATE_POST_ERROR
+	UPDATE_POST_ERROR,
+	DELETE_POST_REQUEST,
+	DELETE_POST_SUCCESS,
+	DELETE_POST_ERROR
 } from '../constants'
 import { createAction } from 'redux-actions'
 import axios from 'axios'
@@ -28,6 +31,9 @@ const onStopEdit = createAction(STOP_EDIT)
 const onUpdatePostRequest = createAction(UPDATE_POST_REQUEST)
 const onUpdatePostSuccess = createAction(UPDATE_POST_SUCCESS)
 const onUpdatePostError = createAction(UPDATE_POST_ERROR)
+const onDeletePostRequest = createAction(DELETE_POST_REQUEST)
+const onDeletePostSuccess = createAction(DELETE_POST_SUCCESS)
+const onDeletePostError = createAction(DELETE_POST_ERROR)
 
 // called from redux-form so a little different than react-redux bindings
 export function login(userLoginObj, dispatch) {
@@ -82,4 +88,16 @@ export function updatePost(post) {
 	}
 }
 
-export function unUpdatePost() {}
+export function deletePost(id) {
+	return dispatch => {
+		dispatch(onDeletePostRequest())
+		return axios
+			.delete(`${ROOT_URL}/posts/${id}`)
+			.then(() => {
+				dispatch(onDeletePostSuccess({ id }))
+			})
+			.catch(err => {
+				dispatch(onDeletePostError(err))
+			})
+	}
+}

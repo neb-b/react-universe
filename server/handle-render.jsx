@@ -38,15 +38,19 @@ const createHtml = (url, preloadedState) => {
 }
 
 export default function handleRender(req, res) {
+	console.log('render')
 	const url = req.url
 	const pieces = url.split('/')
+	// TODO
+	// this is ugly
 	const endpoint = pieces[pieces.length - 1]
 	const isBlogEndpoint = endpoint === 'blog'
 	const isAdminEndpoint = endpoint === 'admin'
 	const { cookies: { auth: authToken } } = req
 
-	const sendHtml = preloadedState => {
-		const html = createHtml(url, preloadedState)
+	const sendHtml = reduxState => {
+		console.log('sending html with this state...', reduxState)
+		const html = createHtml(url, reduxState)
 		res.send(html)
 	}
 
@@ -63,27 +67,21 @@ export default function handleRender(req, res) {
 		// get all posts, published and drafts
 		// get auth cookie, will be authorized before fetch
 		authorize(authToken)
-			.then(res => {
-				// user is authorized
-				getDashboard()
-					.then(posts => {
-						const preloadedState = {
-							dashboard: { posts, loggedIn: true, viewingPosts: true }
-						}
-						sendHtml(preloadedState)
-					})
-					.catch(err => {
-						// not signed in
-						// don't preload state, show login on /admin
-						sendHtml()
-					})
+			.then(getDashboard)
+			.then(posts => {
+				const preloadedState = {
+					dashboard: { posts, loggedIn: true }
+				}
+				return sendHtml(preloadedState)
 			})
-			.catch(() => {
+			.catch(err => {
+				console.log('caught', err)
 				// problem with users auth token
 				res.cookie('auth', null)
 				sendHtml()
 			})
 	} else {
+		console.log('else')
 		sendHtml()
 	}
 }

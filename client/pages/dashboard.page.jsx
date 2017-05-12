@@ -7,7 +7,8 @@ import {
 	createPost,
 	stopEditing,
 	editPost,
-	updatePost
+	updatePost,
+	deletePost
 } from '../redux/action-creators/dashboard'
 import Page from './page'
 import AdminDashboard from '../components/dashboard'
@@ -15,6 +16,7 @@ import Login from '../components/dashboard/login.connected'
 
 const Admin = (props: { loggedIn: boolean, loading: boolean }) => {
 	const { loggedIn, loading } = props
+
 	return (
 		<Page>
 			{!loggedIn && <Login loading={loading} />}
@@ -30,5 +32,6 @@ export default connect(mapStateToProps, {
 	createPost,
 	stopEditing,
 	editPost,
-	updatePost
+	updatePost,
+	deletePost
 })(Admin)

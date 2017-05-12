@@ -46,12 +46,10 @@ export const getPublicPosts = () => {
 				const posts = snapshot.val()
 				let listOfPosts = []
 				for (var key in posts) {
-					console.log('testing', posts[key])
 					if (posts[key].published) {
 						listOfPosts.push(posts[key])
 					}
 				}
-				console.log('listofpost', listOfPosts)
 				resolve(listOfPosts)
 			})
 			.catch(err => {
@@ -67,6 +65,8 @@ export const getDashboard = () => {
 		return db
 			.once('value')
 			.then(snapshot => {
+				// TODO
+				// sort by most recent edit first
 				const posts = snapshot.val()
 				let listOfPosts = []
 				for (var key in posts) {
@@ -110,5 +110,12 @@ export const updatePost = newPost => {
 				return db.set(newPost).then(() => resolve(newPost))
 			})
 			.catch(err => reject(err))
+	})
+}
+
+export const deletePost = id => {
+	const db = admin.database().ref(`posts/${id}`)
+	return new Promise((resolve, reject) => {
+		db.remove().then(resolve).catch(reject)
 	})
 }

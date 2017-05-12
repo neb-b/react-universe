@@ -13,10 +13,13 @@ const Dashboard = (props: { posts: Array<Object> }) => {
 		stopEditing,
 		editPost,
 		activeEditPost,
-		updatePost
+		updatePost,
+		deletePost,
+		justDeleted
 	} = props
 	return (
 		<div className="dashboard-wrapper">
+			{justDeleted && <div>Post deleted</div>}
 			{!isEditing && <Button onClick={createPost}>Create new post</Button>}
 			<div className="dashboard-content">
 				{!isEditing &&
@@ -37,7 +40,8 @@ const Dashboard = (props: { posts: Array<Object> }) => {
 					<PostEditor
 						stopEditing={stopEditing}
 						activeEditPost={activeEditPost}
-						update={updatePost}
+						updatePost={updatePost}
+						deletePost={deletePost}
 					/>}
 			</div>
 		</div>
