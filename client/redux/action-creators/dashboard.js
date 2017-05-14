@@ -55,7 +55,7 @@ export function createPost() {
 				const state = getState()
 				let newPosts = state.dashboard.posts || []
 				newPosts.push(newPost)
-				dispatch(onCreatePostSuccess({ posts: newPosts }))
+				dispatch(onCreatePostSuccess({ posts: newPosts, newPost }))
 			})
 			.catch(err => {
 				dispatch(onCreatePostError())

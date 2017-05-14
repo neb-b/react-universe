@@ -11,16 +11,22 @@ const initialState = {
 	error: null
 }
 
-export default handleActions({
-	[LOAD_POSTS_REQUEST]: (state) => ({ ...state, loading: true }),
-	[LOAD_POSTS_SUCCESS]: (state, { payload: { posts } }) => ({
-		...state,
-		loading: false,
-		posts
-	}),
-	[LOAD_POSTS_ERROR]: (state, { payload }) => ({
-		...state,
-		loading: false,
-		error: payload
-	})
-}, initialState)
+export default handleActions(
+	{
+		[LOAD_POSTS_REQUEST]: state => ({ ...state, loading: true }),
+		[LOAD_POSTS_SUCCESS]: (state, { payload: { posts } }) => ({
+			...state,
+			loading: false,
+			posts
+		}),
+		[LOAD_POSTS_ERROR]: (state, { payload }) => ({
+			...state,
+			loading: false,
+			error: payload
+		})
+
+		// UPDATE_POST_SUCCESS
+		// check if published/unpublished and add/filter to list of posts
+	},
+	initialState
+)

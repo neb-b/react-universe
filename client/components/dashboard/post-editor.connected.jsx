@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
+import { reduxForm, Field } from 'redux-form'
+import { connect } from 'react-redux'
 import io from 'socket.io-client'
 import _ from 'lodash'
-import Button from '../common/button'
 import moment from 'moment'
+import Button from '../common/button'
+import Title from './post-editor/title'
+import Body from './post-editor/body'
 
-class NewPostEditor extends Component {
+class PostEditor extends Component {
 	constructor() {
 		super()
 
@@ -26,6 +30,7 @@ class NewPostEditor extends Component {
 
 	componentWillUnmount() {
 		// destroy socket connection
+		this.socket = null
 	}
 
 	autoSave() {
@@ -48,16 +53,19 @@ class NewPostEditor extends Component {
 			stopEditing,
 			updatePost,
 			deletePost,
-			activeEditPost = {}
+			post,
+			post: { dateCreated, title, body, id, published }
 		} = this.props
-		const { dateCreated, title, body, id, published } = activeEditPost
+		console.log('initial values', post)
 		return (
 			<div>
 				<div>
 					<Button
 						onClick={() =>
+							// TODO:
+							// move this logic out of component
 							updatePost(
-								Object.assign({}, activeEditPost, {
+								Object.assign({}, post, {
 									published: !published,
 									datePublished: new Date().toISOString()
 								})
@@ -68,17 +76,26 @@ class NewPostEditor extends Component {
 					<Button onClick={() => deletePost(id)}>Delete</Button>
 					<Button onClick={stopEditing}>Back to posts</Button>
 				</div>
-				<div>
-					<h1>{title || 'untitled'}</h1>
-					<h2>Created on {moment(dateCreated).format() || ''}</h2>
-
-				</div>
-				<div>
-					{body || 'start typing here...'}
-				</div>
+				<form className="post-form">
+					<Field name="title" component={Title} />
+					<p>Created on {moment(dateCreated).format() || ''}</p>
+					<Field name="body" component={Body} />
+				</form>
 			</div>
 		)
 	}
 }
 
-export default NewPostEditor
+const mapStateToProps = s => ({
+	post: s.post,
+	initialValues: { ...s.post }
+})
+
+// Using redux form just to handle the input actions
+// I won't have a submit button, autosave will take care of that
+const PostEditorForm = reduxForm({
+	form: 'postEditor',
+	enableReinitialize: true
+})(PostEditor)
+
+export default connect(mapStateToProps, null)(PostEditorForm)

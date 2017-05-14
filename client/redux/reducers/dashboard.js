@@ -21,7 +21,6 @@ const initialState = {
 	loggedIn: false,
 	posts: [],
 	isEditing: false,
-	activeEditPost: {},
 	justDeleted: false
 }
 
@@ -50,20 +49,15 @@ export default handleActions(
 		}),
 		[START_EDIT]: (state, { payload: { post } }) => ({
 			...state,
-			isEditing: true,
-			activeEditPost: post
+			isEditing: true
 		}),
 		[STOP_EDIT]: (state, { payload }) => ({
 			...state,
-			isEditing: false,
-			activeEditPost: {}
+			isEditing: false
 		}),
-		[UPDATE_POST_SUCCESS]: (state, { payload }) => ({
+		[UPDATE_POST_SUCCESS]: (state, { payload: { newPost } }) => ({
 			...state,
-			activeEditPost: payload.newPost,
-			posts: state.posts.map(
-				post => (post.id === payload.newPost.id ? payload.newPost : post)
-			)
+			posts: state.posts.map(post => (post.id === newPost.id ? newPost : post))
 		}),
 		[DELETE_POST_REQUEST]: state => ({ ...state, loading: true }),
 		[DELETE_POST_SUCCESS]: (state, { payload: { id } }) => ({

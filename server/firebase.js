@@ -89,7 +89,9 @@ export const createPost = () => {
 	const newPost = {
 		id: postId,
 		dateCreated: new Date().toISOString(),
-		published: false
+		published: false,
+		title: 'untitled',
+		body: ''
 	}
 
 	return new Promise((resolve, reject) => {

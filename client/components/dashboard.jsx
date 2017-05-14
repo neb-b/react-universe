@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import PostEditor from './dashboard/post-editor'
+import PostEditor from './dashboard/post-editor.connected'
 import Button from './common/button'
 
 const Dashboard = (props: { posts: Array<Object> }) => {
@@ -12,7 +12,6 @@ const Dashboard = (props: { posts: Array<Object> }) => {
 		isEditing,
 		stopEditing,
 		editPost,
-		activeEditPost,
 		updatePost,
 		deletePost,
 		justDeleted
@@ -39,7 +38,6 @@ const Dashboard = (props: { posts: Array<Object> }) => {
 				{isEditing &&
 					<PostEditor
 						stopEditing={stopEditing}
-						activeEditPost={activeEditPost}
 						updatePost={updatePost}
 						deletePost={deletePost}
 					/>}
