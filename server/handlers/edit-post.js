@@ -1,5 +1,7 @@
-import { createPost } from '../firebase'
+import { updatePost } from '../firebase'
 
-export default (socket, data) => {
-	console.log('begin edit post...', data)
+export default (socket, newPost) => {
+	updatePost(newPost)
+		.then(() => socket.emit('autosave_success'))
+		.catch(err => socket.emit('autosave_fail', { err }))
 }

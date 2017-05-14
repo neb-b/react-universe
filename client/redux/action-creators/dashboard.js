@@ -14,7 +14,8 @@ import {
 	UPDATE_POST_ERROR,
 	DELETE_POST_REQUEST,
 	DELETE_POST_SUCCESS,
-	DELETE_POST_ERROR
+	DELETE_POST_ERROR,
+	UPDATE_STORE_AFTER_AUTOSAVE
 } from '../constants'
 import { createAction } from 'redux-actions'
 import axios from 'axios'
@@ -34,6 +35,7 @@ const onUpdatePostError = createAction(UPDATE_POST_ERROR)
 const onDeletePostRequest = createAction(DELETE_POST_REQUEST)
 const onDeletePostSuccess = createAction(DELETE_POST_SUCCESS)
 const onDeletePostError = createAction(DELETE_POST_ERROR)
+const onUpdateStoreAfterAutoSave = createAction(UPDATE_STORE_AFTER_AUTOSAVE)
 
 // called from redux-form so a little different than react-redux bindings
 export function login(userLoginObj, dispatch) {
@@ -100,4 +102,9 @@ export function deletePost(id) {
 				dispatch(onDeletePostError(err))
 			})
 	}
+}
+
+export function updateStoreAfterAutoSave(newPost) {
+	console.log('updating store....', newPost)
+	return dispatch => dispatch(onUpdateStoreAfterAutoSave({ newPost }))
 }

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import io from 'socket.io-client'
 import _ from 'lodash'
 import moment from 'moment'
+import { updateStoreAfterAutoSave } from '../../redux/action-creators/dashboard'
 import Button from '../common/button'
 import Title from './post-editor/title'
 import Body from './post-editor/body'
@@ -13,11 +14,14 @@ class PostEditor extends Component {
 		super()
 
 		this.state = {
-			socketConnected: false
+			socketConnected: false,
+			justSaved: false
 		}
 
 		this.socket = io('http://localhost:3000')
+		this.throttledAutoSave = _.debounce(this.autoSave, 2000)
 	}
+
 	componentDidMount() {
 		// setup socket connection with server
 		// listen for keystrokes and autosave when user starts typing
@@ -25,7 +29,14 @@ class PostEditor extends Component {
 			this.setState({ socketConnected: true })
 		})
 
-		window.addEventListener('keyup', this._keyUpHanlder.bind(this))
+		this.socket.on('autosave_success', this._handleAutoSaveSucces.bind(this))
+		this.socket.on('autosave_error', this._handleAutoSaveError.bind(this))
+
+		const inputs = document.querySelectorAll('.post--input')
+		console.log('inputs', inputs)
+		inputs.forEach(node =>
+			node.addEventListener('keyup', this._handleKeyUp.bind(this))
+		)
 	}
 
 	componentWillUnmount() {
@@ -33,20 +44,34 @@ class PostEditor extends Component {
 		this.socket = null
 	}
 
-	autoSave() {
-		// will run if user stops typing for 3 seconds
-		// call redux submit => but won't submit form
-		// socket.emit with new text
-		// eventually will only emit last change
-
-		// const { post: { text, title } } = this.props
-		const { post } = this.props
-		this.socket.emit('editPost', post)
+	_handleKeyUp() {
+		this.throttledAutoSave()
 	}
 
-	_keyUpHanlder() {
-		const debounced = _.debounce(this.autoSave.bind(this), 3000)
-		debounced()
+	autoSave() {
+		// will run if user stops typing for 2 seconds
+		// socket.emit with new text
+
+		// title and body are the only values a user could edit to cause autosave to run
+		const { postEditorForm: { values: { title, body, id } } } = this.props
+		const newValues = { title, body, id }
+		this.socket.emit('editPost', newValues)
+	}
+
+	_handleAutoSaveSucces() {
+		// don't want to just call updatePost
+		// the backend is saved, just update store with form values
+		const { updateStoreAfterAutoSave, postEditorForm: { values } } = this.props
+		updateStoreAfterAutoSave(values)
+
+		this.setState({ justSaved: true })
+		setTimeout(() => {
+			this.setState({ justSaved: false })
+		}, 2000)
+	}
+
+	_handleAutoSaveError(err) {
+		console.log('autosave error!')
 	}
 
 	render() {
@@ -65,12 +90,10 @@ class PostEditor extends Component {
 						onClick={() =>
 							// TODO:
 							// move this logic out of component
-							updatePost(
-								Object.assign({}, post, {
-									published: !published,
-									datePublished: new Date().toISOString()
-								})
-							)}
+							updatePost({
+								published: !published,
+								datePublished: new Date().toISOString()
+							})}
 					>
 						{published ? 'un publish' : 'publish'}
 					</Button>
@@ -78,6 +101,7 @@ class PostEditor extends Component {
 					<Button onClick={stopEditing}>Back to posts</Button>
 				</div>
 				<div>
+					{this.state.justSaved && <p>Just saved...</p>}
 					<p>Created on {moment(dateCreated).format() || ''}</p>
 					{lastEdited && <p>Last edited: {moment(lastEdited).format()}</p>}
 				</div>
@@ -92,7 +116,9 @@ class PostEditor extends Component {
 
 const mapStateToProps = s => ({
 	post: s.post,
-	initialValues: { ...s.post }
+	// so redux form can pull values automatically
+	initialValues: { ...s.post },
+	postEditorForm: s.form.postEditor
 })
 
 // Using redux form just to handle the input actions
@@ -102,4 +128,6 @@ const PostEditorForm = reduxForm({
 	enableReinitialize: true
 })(PostEditor)
 
-export default connect(mapStateToProps, null)(PostEditorForm)
+export default connect(mapStateToProps, { updateStoreAfterAutoSave })(
+	PostEditorForm
+)

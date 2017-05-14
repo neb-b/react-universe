@@ -101,14 +101,14 @@ export const createPost = () => {
 
 export const updatePost = newPost => {
 	const db = admin.database().ref(`posts/${newPost.id}`)
-	const newPostObj = Object.assign({}, newPost, {
-		lastEdited: new Date().toISOString()
-	})
 
 	return new Promise((resolve, reject) => {
 		return db
-			.set(newPostObj)
-			.then(() => resolve(newPostObj))
+			.once('value', snapshot => {
+				const oldPost = snapshot.val()
+				const updatedPost = Object.assign({}, oldPost, newPost)
+				return db.set(updatedPost).then(() => resolve(updatedPost))
+			})
 			.catch(err => reject(err))
 	})
 }

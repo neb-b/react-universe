@@ -3,7 +3,11 @@ import React from 'react'
 const Body = ({ input }) => {
 	return (
 		<div>
-			<textarea {...input} placeholder="Start typing here..." />
+			<textarea
+				{...input}
+				className="post--input"
+				placeholder="Start typing here..."
+			/>
 		</div>
 	)
 }
