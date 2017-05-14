@@ -3,8 +3,7 @@ import React from 'react'
 const Body = ({ input }) => {
 	return (
 		<div>
-			<label>Body</label>
-			<textarea {...input} />
+			<textarea {...input} placeholder="Start typing here..." />
 		</div>
 	)
 }

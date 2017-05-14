@@ -35,6 +35,7 @@ class PostEditor extends Component {
 
 	autoSave() {
 		// will run if user stops typing for 3 seconds
+		// call redux submit => but won't submit form
 		// socket.emit with new text
 		// eventually will only emit last change
 
@@ -54,9 +55,9 @@ class PostEditor extends Component {
 			updatePost,
 			deletePost,
 			post,
-			post: { dateCreated, title, body, id, published }
+			post: { dateCreated, title, body, id, published, lastEdited }
 		} = this.props
-		console.log('initial values', post)
+
 		return (
 			<div>
 				<div>
@@ -76,9 +77,12 @@ class PostEditor extends Component {
 					<Button onClick={() => deletePost(id)}>Delete</Button>
 					<Button onClick={stopEditing}>Back to posts</Button>
 				</div>
+				<div>
+					<p>Created on {moment(dateCreated).format() || ''}</p>
+					{lastEdited && <p>Last edited: {moment(lastEdited).format()}</p>}
+				</div>
 				<form className="post-form">
 					<Field name="title" component={Title} />
-					<p>Created on {moment(dateCreated).format() || ''}</p>
 					<Field name="body" component={Body} />
 				</form>
 			</div>
@@ -92,7 +96,7 @@ const mapStateToProps = s => ({
 })
 
 // Using redux form just to handle the input actions
-// I won't have a submit button, autosave will take care of that
+// Submit won't submit the form, but emit a socket message
 const PostEditorForm = reduxForm({
 	form: 'postEditor',
 	enableReinitialize: true

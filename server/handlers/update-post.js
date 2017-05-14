@@ -5,7 +5,6 @@ export default (req, res) => {
 	const post = req.body.post
 	updatePost(post)
 		.then(newPost => {
-			console.log('response', newPost)
 			res.send({ newPost })
 		})
 		.catch(err => {
