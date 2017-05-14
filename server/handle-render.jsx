@@ -38,7 +38,6 @@ const createHtml = (url, preloadedState) => {
 }
 
 export default function handleRender(req, res) {
-	console.log('render')
 	const url = req.url
 	const pieces = url.split('/')
 	// TODO
@@ -49,11 +48,11 @@ export default function handleRender(req, res) {
 	const { cookies: { auth: authToken } } = req
 
 	const sendHtml = reduxState => {
-		console.log('sending html with this state...', reduxState)
 		const html = createHtml(url, reduxState)
 		res.send(html)
 	}
 
+	// fetch data serverside if /blog or /admin
 	if (isBlogEndpoint) {
 		getPublicPosts()
 			.then(posts => {
@@ -75,13 +74,11 @@ export default function handleRender(req, res) {
 				return sendHtml(preloadedState)
 			})
 			.catch(err => {
-				console.log('caught', err)
 				// problem with users auth token
 				res.cookie('auth', null)
 				sendHtml()
 			})
 	} else {
-		console.log('else')
 		sendHtml()
 	}
 }

@@ -72,7 +72,6 @@ export const getDashboard = () => {
 				for (var key in posts) {
 					listOfPosts.push(posts[key])
 				}
-				console.log('posts', listOfPosts)
 				resolve(listOfPosts)
 			})
 			.catch(err => {
@@ -85,7 +84,6 @@ export const getDashboard = () => {
 export const createPost = () => {
 	const db = admin.database()
 	const postId = uuid()
-	console.log('creating...')
 	const newPost = {
 		id: postId,
 		dateCreated: new Date().toISOString(),

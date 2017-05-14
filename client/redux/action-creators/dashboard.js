@@ -105,6 +105,5 @@ export function deletePost(id) {
 }
 
 export function updateStoreAfterAutoSave(newPost) {
-	console.log('updating store....', newPost)
 	return dispatch => dispatch(onUpdateStoreAfterAutoSave({ newPost }))
 }

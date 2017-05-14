@@ -20,6 +20,7 @@ class PostEditor extends Component {
 
 		this.socket = io('http://localhost:3000')
 		this.throttledAutoSave = _.debounce(this.autoSave, 2000)
+		this.justSavedTimeout = null
 	}
 
 	componentDidMount() {
@@ -33,7 +34,6 @@ class PostEditor extends Component {
 		this.socket.on('autosave_error', this._handleAutoSaveError.bind(this))
 
 		const inputs = document.querySelectorAll('.post--input')
-		console.log('inputs', inputs)
 		inputs.forEach(node =>
 			node.addEventListener('keyup', this._handleKeyUp.bind(this))
 		)
@@ -42,6 +42,7 @@ class PostEditor extends Component {
 	componentWillUnmount() {
 		// destroy socket connection
 		this.socket = null
+		clearTimeout(this.justSavedTimeout)
 	}
 
 	_handleKeyUp() {
@@ -65,13 +66,13 @@ class PostEditor extends Component {
 		updateStoreAfterAutoSave(values)
 
 		this.setState({ justSaved: true })
-		setTimeout(() => {
+		this.justSavedTimeout = setTimeout(() => {
 			this.setState({ justSaved: false })
 		}, 2000)
 	}
 
 	_handleAutoSaveError(err) {
-		console.log('autosave error!')
+		console.log('autosave error!', err)
 	}
 
 	render() {
