@@ -15,6 +15,7 @@ class PostEditor extends Component {
 
 		this.state = {
 			socketConnected: false,
+			saving: false,
 			justSaved: false
 		}
 
@@ -50,22 +51,29 @@ class PostEditor extends Component {
 	}
 
 	autoSave() {
-		// will run if user stops typing for 2 seconds
-		// socket.emit with new text
+		// will run if user stops typing for 2 seconds or form onBlur
+		// socket.emit with new post data
+		const {
+			postEditorForm: { values, values: { title, body, id } }
+		} = this.props
+
+		// if state hasn't changed, don't need to save
+		if (_.isEqual(this.state.lastSaved, values)) return
 
 		// title and body are the only values a user could edit to cause autosave to run
-		const { postEditorForm: { values: { title, body, id } } } = this.props
 		const newValues = { title, body, id }
 		this.socket.emit('editPost', newValues)
+		this.setState({ saving: true, lastSaved: values })
 	}
 
 	_handleAutoSaveSucces() {
+		const { updateStoreAfterAutoSave, postEditorForm: { values } } = this.props
+
 		// don't want to just call updatePost
 		// the backend is saved, just update store with form values
-		const { updateStoreAfterAutoSave, postEditorForm: { values } } = this.props
 		updateStoreAfterAutoSave(values)
 
-		this.setState({ justSaved: true })
+		this.setState({ saving: false, justSaved: true })
 		this.justSavedTimeout = setTimeout(() => {
 			this.setState({ justSaved: false })
 		}, 2000)
@@ -102,13 +110,18 @@ class PostEditor extends Component {
 					<Button onClick={stopEditing}>Back to posts</Button>
 				</div>
 				<div>
-					{this.state.justSaved && <p>Just saved...</p>}
+					{this.state.saving && <p>Saving...</p>}
+					{this.state.justSaved && <p>Saved</p>}
 					<p>Created on {moment(dateCreated).format() || ''}</p>
 					{lastEdited && <p>Last edited: {moment(lastEdited).format()}</p>}
 				</div>
 				<form className="post-form">
-					<Field name="title" component={Title} />
-					<Field name="body" component={Body} />
+					<Field
+						name="title"
+						component={Title}
+						save={this.autoSave.bind(this)}
+					/>
+					<Field name="body" component={Body} save={this.autoSave.bind(this)} />
 				</form>
 			</div>
 		)

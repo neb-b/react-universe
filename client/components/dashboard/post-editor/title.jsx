@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Title = ({ input }) => {
+const Title = ({ input, save }) => {
 	return (
 		<div>
-			<input {...input} className="post--input" />
+			<input {...input} onBlur={save} className="post--input" />
 		</div>
 	)
 }

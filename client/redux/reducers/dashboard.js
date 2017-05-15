@@ -75,10 +75,7 @@ export default handleActions(
 		}),
 		[UPDATE_STORE_AFTER_AUTOSAVE]: (state, { payload: { newPost } }) => ({
 			...state,
-			posts: state.posts.map(post => {
-				console.log('statepost', post)
-				return post.id === newPost.id ? newPost : post
-			})
+			posts: state.posts.map(post => (post.id === newPost.id ? newPost : post))
 		})
 	},
 	initialState
