@@ -96,13 +96,16 @@ class PostEditor extends Component {
 			<div>
 				<div>
 					<Button
-						onClick={() =>
+						onClick={() => {
 							// TODO:
 							// move this logic out of component
-							updatePost({
-								published: !published,
-								datePublished: new Date().toISOString()
-							})}
+							const newPostVals = { id, published: !published }
+							if (!published) {
+								newPostVals.datePublished = new Date().toISOString()
+							}
+
+							updatePost(newPostVals)
+						}}
 					>
 						{published ? 'un publish' : 'publish'}
 					</Button>
