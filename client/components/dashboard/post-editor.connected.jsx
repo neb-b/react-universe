@@ -115,7 +115,7 @@ class PostEditor extends Component {
 					<p>Created on {moment(dateCreated).format() || ''}</p>
 					{lastEdited && <p>Last edited: {moment(lastEdited).format()}</p>}
 				</div>
-				<form className="post-form">
+				<form className="post-form" onSubmit={e => e.preventDefault()}>
 					<Field
 						name="title"
 						component={Title}
