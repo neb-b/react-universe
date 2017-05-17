@@ -7,7 +7,7 @@ import {
 	createPost,
 	stopEditing,
 	editPost,
-	updatePost,
+	publishPost,
 	deletePost
 } from '../redux/action-creators/dashboard'
 import Page from './page'
@@ -32,6 +32,6 @@ export default connect(mapStateToProps, {
 	createPost,
 	stopEditing,
 	editPost,
-	updatePost,
+	publishPost,
 	deletePost
 })(Admin)

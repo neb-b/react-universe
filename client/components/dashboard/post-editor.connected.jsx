@@ -66,12 +66,10 @@ class PostEditor extends Component {
 		this.setState({ saving: true, lastSaved: values })
 	}
 
-	_handleAutoSaveSucces() {
-		const { updateStoreAfterAutoSave, postEditorForm: { values } } = this.props
-
-		// don't want to just call updatePost
-		// the backend is saved, just update store with form values
-		updateStoreAfterAutoSave(values)
+	// the backend is saved, just update store with new post
+	_handleAutoSaveSucces(savedPost) {
+		console.log('savedPost', savedPost)
+		updateStoreAfterAutoSave(savedPost)
 
 		this.setState({ saving: false, justSaved: true })
 		this.justSavedTimeout = setTimeout(() => {
@@ -86,7 +84,7 @@ class PostEditor extends Component {
 	render() {
 		const {
 			stopEditing,
-			updatePost,
+			publishPost,
 			deletePost,
 			post,
 			post: { dateCreated, title, body, id, published, lastEdited }
@@ -104,7 +102,7 @@ class PostEditor extends Component {
 								newPostVals.datePublished = new Date().toISOString()
 							}
 
-							updatePost(newPostVals)
+							publishPost(newPostVals)
 						}}
 					>
 						{published ? 'un publish' : 'publish'}

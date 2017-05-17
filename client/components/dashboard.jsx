@@ -3,7 +3,7 @@ import { StyleSheet, css } from 'aphrodite'
 import moment from 'moment'
 import PostEditor from './dashboard/post-editor.connected'
 import Button from './common/button'
-const formatDate = dateStr => moment(dateStr).format('ddd MM/YY')
+const formatDate = dateStr => moment(dateStr).format('hh:mm a ddd MM/YY')
 
 const Dashboard = (props: { posts: Array<Object> }) => {
 	const {
@@ -14,7 +14,7 @@ const Dashboard = (props: { posts: Array<Object> }) => {
 		isEditing,
 		stopEditing,
 		editPost,
-		updatePost,
+		publishPost,
 		deletePost,
 		justDeleted
 	} = props
@@ -52,7 +52,7 @@ const Dashboard = (props: { posts: Array<Object> }) => {
 				{isEditing &&
 					<PostEditor
 						stopEditing={stopEditing}
-						updatePost={updatePost}
+						publishPost={publishPost}
 						deletePost={deletePost}
 					/>}
 			</div>
@@ -64,7 +64,8 @@ const styles = StyleSheet.create({
 	post: {
 		display: 'flex',
 		flexDirection: 'row',
-		paddingTop: 20
+		paddingTop: 20,
+		cursor: 'pointer'
 	}
 })
 

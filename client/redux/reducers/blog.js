@@ -25,7 +25,7 @@ export default handleActions(
 			error: payload
 		})
 
-		// UPDATE_POST_SUCCESS
+		// PUBLISH_POST_SUCCESS
 		// check if published/unpublished and add/filter to list of posts
 	},
 	initialState

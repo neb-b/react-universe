@@ -1,7 +1,7 @@
 import { updatePost } from '../firebase'
 
-export default (socket, newPost) => {
-	updatePost(newPost)
-		.then(() => socket.emit('autosave_success'))
+export default (socket, post) => {
+	updatePost(post)
+		.then(savedPost => socket.emit('autosave_success', savedPost))
 		.catch(err => socket.emit('autosave_fail', { err }))
 }

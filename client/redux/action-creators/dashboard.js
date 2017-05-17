@@ -9,9 +9,9 @@ import {
 	CREATE_POST_ERROR,
 	STOP_EDIT,
 	START_EDIT,
-	UPDATE_POST_REQUEST,
-	UPDATE_POST_SUCCESS,
-	UPDATE_POST_ERROR,
+	PUBLISH_POST_REQUEST,
+	PUBLISH_POST_SUCCESS,
+	PUBLISH_POST_ERROR,
 	DELETE_POST_REQUEST,
 	DELETE_POST_SUCCESS,
 	DELETE_POST_ERROR,
@@ -29,9 +29,9 @@ const onCreatePostError = createAction(CREATE_POST_ERROR)
 const onViewPosts = createAction(VIEW_POSTS)
 const onBeginEdit = createAction(START_EDIT)
 const onStopEdit = createAction(STOP_EDIT)
-const onUpdatePostRequest = createAction(UPDATE_POST_REQUEST)
-const onUpdatePostSuccess = createAction(UPDATE_POST_SUCCESS)
-const onUpdatePostError = createAction(UPDATE_POST_ERROR)
+const onPublishPostRequest = createAction(PUBLISH_POST_REQUEST)
+const onPublishPostSuccess = createAction(PUBLISH_POST_SUCCESS)
+const onPublishPostError = createAction(PUBLISH_POST_ERROR)
 const onDeletePostRequest = createAction(DELETE_POST_REQUEST)
 const onDeletePostSuccess = createAction(DELETE_POST_SUCCESS)
 const onDeletePostError = createAction(DELETE_POST_ERROR)
@@ -77,17 +77,17 @@ export function stopEditing() {
 	return dispatch => dispatch(onStopEdit())
 }
 
-export function updatePost(post) {
+export function publishPost(post) {
 	return dispatch => {
-		dispatch(onUpdatePostRequest())
+		dispatch(onPublishPostRequest())
 		return axios
-			.put(`${ROOT_URL}/posts/${post.id}/update`, { post })
+			.put(`${ROOT_URL}/posts/${post.id}/publish`, { post })
 			.then(({ data: { newPost } }) => {
 				console.log('')
-				dispatch(onUpdatePostSuccess({ newPost }))
+				dispatch(onPublishPostSuccess({ newPost }))
 			})
 			.catch(err => {
-				dispatch(onUpdatePostError(err))
+				dispatch(onPublishPostError(err))
 			})
 	}
 }

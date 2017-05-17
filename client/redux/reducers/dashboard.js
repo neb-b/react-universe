@@ -9,7 +9,7 @@ import {
 	CREATE_POST_ERROR,
 	STOP_EDIT,
 	START_EDIT,
-	UPDATE_POST_SUCCESS,
+	PUBLISH_POST_SUCCESS,
 	DELETE_POST_REQUEST,
 	DELETE_POST_SUCCESS,
 	DELETE_POST_ERROR,
@@ -56,7 +56,7 @@ export default handleActions(
 			...state,
 			isEditing: false
 		}),
-		[UPDATE_POST_SUCCESS]: (state, { payload: { newPost } }) => ({
+		[PUBLISH_POST_SUCCESS]: (state, { payload: { newPost } }) => ({
 			...state,
 			posts: state.posts.map(post => (post.id === newPost.id ? newPost : post))
 		}),

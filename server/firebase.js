@@ -104,10 +104,11 @@ export const updatePost = newPost => {
 		return db
 			.once('value', snapshot => {
 				const oldPost = snapshot.val()
-				console.log('old post', oldPost)
-				console.log('new', newPost)
-				const updatedPost = Object.assign({}, oldPost, newPost)
-				console.log('udpated', updatedPost)
+				console.log('newPost', newPost)
+				const updatedPost = Object.assign({}, oldPost, newPost, {
+					lastEdited: new Date().toISOString()
+				})
+				console.log('updatedPost', updatedPost)
 				return db.set(updatedPost).then(() => resolve(updatedPost))
 			})
 			.catch(err => reject(err))

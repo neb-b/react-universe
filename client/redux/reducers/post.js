@@ -8,7 +8,7 @@ import {
 	CREATE_POST_SUCCESS,
 	STOP_EDIT,
 	START_EDIT,
-	UPDATE_POST_SUCCESS,
+	PUBLISH_POST_SUCCESS,
 	DELETE_POST_REQUEST,
 	DELETE_POST_SUCCESS,
 	DELETE_POST_ERROR
@@ -49,7 +49,7 @@ export default handleActions(
 			isPublished: null,
 			lastEdited: null
 		}),
-		[UPDATE_POST_SUCCESS]: (state, { payload: { newPost } }) => ({
+		[PUBLISH_POST_SUCCESS]: (state, { payload: { newPost } }) => ({
 			...state,
 			...newPost
 		}),
