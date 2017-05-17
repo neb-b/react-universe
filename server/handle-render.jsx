@@ -3,19 +3,21 @@ import { renderToString } from 'react-dom/server'
 import { StaticRouter, matchPath, redirect } from 'react-router-dom'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
+import { StyleSheetServer } from 'aphrodite'
 import App from '../client/app'
 import reducers from '../client/redux/reducers'
-import css from '../client/style/main.css'
 import { getPublicPosts, getDashboard, authorize } from './firebase'
 
 const createHtml = (url, preloadedState) => {
 	const store = createStore(reducers, preloadedState)
-	const html = renderToString(
-		<Provider store={store}>
-			<StaticRouter location={url} context={{}}>
-				<App />
-			</StaticRouter>
-		</Provider>
+	const { html, css } = StyleSheetServer.renderStatic(() =>
+		renderToString(
+			<Provider store={store}>
+				<StaticRouter location={url} context={{}}>
+					<App />
+				</StaticRouter>
+			</Provider>
+		)
 	)
 
 	const finalState = store.getState()
@@ -24,7 +26,7 @@ const createHtml = (url, preloadedState) => {
 		<html>
 			<head>
 				<title>React Universe</title>
-				<style>${css.toString()}</style>
+				<style>${css.content}</style>
 			</head>
 			<body>
 				<div id="root" class="container">${html}</div>

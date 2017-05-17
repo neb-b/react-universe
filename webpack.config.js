@@ -1,8 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
 const nodeExternals = require('webpack-node-externals')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const FlowBabelWebpackPlugin = require('flow-babel-webpack-plugin');
 
 module.exports = [
 	{
@@ -28,10 +26,6 @@ module.exports = [
 							]
 						}
 					}
-				},
-				{
-					test: /\.css$/,
-					loaders: 'style-loader!css-loader'
 				}
 			]
 		},
@@ -67,13 +61,6 @@ module.exports = [
 								require('babel-plugin-transform-object-rest-spread')
 							]
 						}
-					}
-				},
-				{
-					test: /\.css$/,
-					use: {
-						loader: 'css-loader',
-						options: { modules: true }
 					}
 				}
 			]

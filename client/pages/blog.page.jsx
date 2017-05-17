@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { loadPosts } from '../redux/action-creators/blog'
 import Page from './page'
 import Blog from '../components/blog'
+import { StyleSheet, css } from 'aphrodite'
 
 class BlogPage extends Component {
 	constructor(props) {
@@ -22,16 +23,21 @@ class BlogPage extends Component {
 		const { posts } = this.props
 		return (
 			<Page>
-				<h1>My Blog</h1>
-				<Blog posts={posts} />
+				<div className={css(styles.red)}>
+					<h1>My Blog</h1>
+					<Blog posts={posts} />
+				</div>
 			</Page>
 		)
 	}
 }
 
-const mapStateToProps = (s) => ({...s.blog})
+const styles = StyleSheet.create({
+	red: {
+		color: 'red'
+	}
+})
 
-export default connect(
-	mapStateToProps,
-	{ loadPosts }
-)(BlogPage)
+const mapStateToProps = s => ({ ...s.blog })
+
+export default connect(mapStateToProps, { loadPosts })(BlogPage)
