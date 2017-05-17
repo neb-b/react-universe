@@ -26,10 +26,10 @@ const initialState = {
 
 export default handleActions(
 	{
-		[CREATE_POST_REQUEST]: (state, { payload }) => ({
+		[CREATE_POST_REQUEST]: (state, { payload: { date } }) => ({
 			...state,
-			// will be like a fullscreen modal, so don't have to reset other props
-			initializing: true
+			initializing: true,
+			date
 		}),
 		[CREATE_POST_SUCCESS]: (state, { payload: { newPost } }) => ({
 			...state,
@@ -42,7 +42,12 @@ export default handleActions(
 		}),
 		[STOP_EDIT]: (state, { payload }) => ({
 			...state,
-			post: {}
+			title: '',
+			body: '',
+			dateCreated: '',
+			datePublished: '',
+			isPublished: null,
+			lastEdited: null
 		}),
 		[UPDATE_POST_SUCCESS]: (state, { payload: { newPost } }) => ({
 			...state,

@@ -1,7 +1,8 @@
 import { createPost } from '../firebase'
 
 export default (req, res) => {
-	createPost()
+	const { date } = req.body
+	createPost(date)
 		.then(newPost => {
 			res.send({ newPost })
 		})

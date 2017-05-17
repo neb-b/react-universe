@@ -3,6 +3,8 @@ import moment from 'moment'
 import PostEditor from './dashboard/post-editor.connected'
 import Button from './common/button'
 
+const formatDate = dateStr => moment(dateStr).format('ddd MM/YY')
+
 const Dashboard = (props: { posts: Array<Object> }) => {
 	const {
 		posts,
@@ -25,11 +27,13 @@ const Dashboard = (props: { posts: Array<Object> }) => {
 					<div>
 						{posts.map(
 							(post: { title: string, dateCreated: string }, index) => {
-								const { title, dateCreated } = post
+								const { title, dateCreated, lastEdited } = post
 								return (
 									<div key={index} onClick={() => editPost(post)}>
 										<h2>{title || 'untitled'}</h2>
-										<span>{moment(dateCreated).format()}</span>
+										{lastEdited &&
+											<div>{`Last edited ${formatDate(lastEdited)}`}</div>}
+										<div>{`Created on ${formatDate(dateCreated)}`}</div>
 									</div>
 								)
 							}

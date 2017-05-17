@@ -50,9 +50,11 @@ export function login(userLoginObj, dispatch) {
 
 export function createPost() {
 	return (dispatch, getState) => {
-		dispatch(onCreatePostRequest())
+		const date = new Date().toISOString()
+
+		dispatch(onCreatePostRequest({ date }))
 		return axios
-			.post(`${ROOT_URL}/posts/create`)
+			.post(`${ROOT_URL}/posts/create`, { date })
 			.then(({ data: { newPost } }) => {
 				const state = getState()
 				let newPosts = state.dashboard.posts || []

@@ -110,7 +110,6 @@ class PostEditor extends Component {
 					<Button onClick={stopEditing}>Back to posts</Button>
 				</div>
 				<div>
-					{this.state.saving && <p>Saving...</p>}
 					{this.state.justSaved && <p>Saved</p>}
 					<p>Created on {moment(dateCreated).format() || ''}</p>
 					{lastEdited && <p>Last edited: {moment(lastEdited).format()}</p>}

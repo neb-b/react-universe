@@ -81,14 +81,14 @@ export const getDashboard = () => {
 	})
 }
 
-export const createPost = () => {
+export const createPost = date => {
 	const db = admin.database()
 	const postId = uuid()
 	const newPost = {
 		id: postId,
-		dateCreated: new Date().toISOString(),
+		dateCreated: date,
 		published: false,
-		title: 'untitled',
+		title: '',
 		body: ''
 	}
 
