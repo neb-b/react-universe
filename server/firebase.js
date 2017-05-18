@@ -72,7 +72,7 @@ export const getDashboard = () => {
 				for (var key in posts) {
 					listOfPosts.push(posts[key])
 				}
-				resolve(listOfPosts)
+				resolve({ posts: listOfPosts })
 			})
 			.catch(err => {
 				console.log('error', err)
@@ -104,11 +104,10 @@ export const updatePost = newPost => {
 		return db
 			.once('value', snapshot => {
 				const oldPost = snapshot.val()
-				console.log('newPost', newPost)
 				const updatedPost = Object.assign({}, oldPost, newPost, {
 					lastEdited: new Date().toISOString()
 				})
-				console.log('updatedPost', updatedPost)
+
 				return db.set(updatedPost).then(() => resolve(updatedPost))
 			})
 			.catch(err => reject(err))
@@ -119,5 +118,18 @@ export const deletePost = id => {
 	const db = admin.database().ref(`posts/${id}`)
 	return new Promise((resolve, reject) => {
 		db.remove().then(resolve).catch(reject)
+	})
+}
+
+export const getPost = id => {
+	const db = admin.database().ref(`posts/${id}`)
+	return new Promise((resolve, reject) => {
+		db
+			.once('value')
+			.then(snapshot => {
+				const post = snapshot.val()
+				resolve(post)
+			})
+			.catch(err => reject(err))
 	})
 }

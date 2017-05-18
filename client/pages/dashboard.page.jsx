@@ -1,9 +1,7 @@
-// @flow
-
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {
-	viewPosts,
+	loadPosts,
 	createPost,
 	stopEditing,
 	editPost,
@@ -14,21 +12,31 @@ import Page from './page'
 import AdminDashboard from '../components/dashboard'
 import Login from '../components/dashboard/login.connected'
 
-const Admin = (props: { loggedIn: boolean, loading: boolean }) => {
-	const { loggedIn, loading } = props
+class Admin extends Component {
+	componentDidMount() {
+		const { initializing } = this.props
 
-	return (
-		<Page>
-			{!loggedIn && <Login loading={loading} />}
-			{loggedIn && <AdminDashboard {...props} />}
-		</Page>
-	)
+		if (initializing) {
+			loadPosts()
+		}
+	}
+
+	render() {
+		const { loggedIn, loading } = this.props
+
+		return (
+			<Page>
+				{!loggedIn && <Login loading={loading} />}
+				{loggedIn && <AdminDashboard {...this.props} />}
+			</Page>
+		)
+	}
 }
 
 const mapStateToProps = s => ({ ...s.dashboard })
 
 export default connect(mapStateToProps, {
-	viewPosts,
+	loadPosts,
 	createPost,
 	stopEditing,
 	editPost,

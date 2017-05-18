@@ -6,19 +6,25 @@ import { Provider } from 'react-redux'
 import { StyleSheetServer } from 'aphrodite'
 import App from '../client/app'
 import reducers from '../client/redux/reducers'
-import { getPublicPosts, getDashboard, authorize } from './firebase'
+import { getPublicPosts, getDashboard, getPost, authorize } from './firebase'
 
-const createHtml = (url, preloadedState) => {
+const createHtml = (url, preloadedState, res) => {
 	const store = createStore(reducers, preloadedState)
+	const context = {}
+
 	const { html, css } = StyleSheetServer.renderStatic(() =>
 		renderToString(
 			<Provider store={store}>
-				<StaticRouter location={url} context={{}}>
+				<StaticRouter location={url} context={context}>
 					<App />
 				</StaticRouter>
 			</Provider>
 		)
 	)
+
+	if (context.url) {
+		res.redirect(301, context.url)
+	}
 
 	const finalState = store.getState()
 	return `
@@ -42,15 +48,19 @@ const createHtml = (url, preloadedState) => {
 export default function handleRender(req, res) {
 	const url = req.url
 	const pieces = url.split('/')
-	// TODO
-	// this is ugly
-	const endpoint = pieces[pieces.length - 1]
+
+	// pieces[0] is empty string
+	// ex: /admin/edit/12345
+	// ['', 'admin', 'edit', '12345']
+	const endpoint = pieces[1]
+	const isEditing = pieces[2] === 'edit'
+	const editingId = pieces[3]
 	const isBlogEndpoint = endpoint === 'blog'
 	const isAdminEndpoint = endpoint === 'admin'
 	const { cookies: { auth: authToken } } = req
 
 	const sendHtml = reduxState => {
-		const html = createHtml(url, reduxState)
+		const html = createHtml(url, reduxState, res)
 		res.send(html)
 	}
 
@@ -66,19 +76,33 @@ export default function handleRender(req, res) {
 			})
 	} else if (isAdminEndpoint && authToken) {
 		// get all posts, published and drafts
+		// if editing, find active post and set that in preloaded state
 		// get auth cookie, will be authorized before fetch
 		authorize(authToken)
 			.then(getDashboard)
-			.then(posts => {
+			.then(savedDashboard => {
+				let activePost
+				if (editingId) {
+					savedDashboard.posts.some(post => {
+						if (post.id === editingId) {
+							activePost = post
+							return true
+						}
+
+						return false
+					})
+				}
+
 				const preloadedState = {
-					dashboard: { posts, loggedIn: true }
+					dashboard: { ...savedDashboard, loggedIn: true },
+					post: activePost
 				}
 				return sendHtml(preloadedState)
 			})
 			.catch(err => {
 				// problem with users auth token
-				res.cookie('auth', null)
-				sendHtml()
+				res.cookie('auth', '')
+				res.redirect('/admin')
 			})
 	} else {
 		sendHtml()

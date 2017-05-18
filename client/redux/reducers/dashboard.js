@@ -17,6 +17,7 @@ import {
 } from '../constants'
 
 const initialState = {
+	initializing: true,
 	loading: false,
 	error: null,
 	loggedIn: false,
@@ -31,12 +32,14 @@ export default handleActions(
 		[LOGIN_SUCCESS]: (state, { payload: { posts } }) => ({
 			...state,
 			loading: false,
+			initializing: false,
 			loggedIn: true,
 			posts
 		}),
 		[LOGIN_ERROR]: (state, { payload }) => ({
 			...state,
 			loading: false,
+			initializing: false,
 			error: payload
 		}),
 		[CREATE_POST_REQUEST]: (state, { payload }) => ({
@@ -47,14 +50,6 @@ export default handleActions(
 		[CREATE_POST_SUCCESS]: (state, { payload: { posts } }) => ({
 			...state,
 			posts
-		}),
-		[START_EDIT]: (state, { payload: { post } }) => ({
-			...state,
-			isEditing: true
-		}),
-		[STOP_EDIT]: (state, { payload }) => ({
-			...state,
-			isEditing: false
 		}),
 		[PUBLISH_POST_SUCCESS]: (state, { payload: { newPost } }) => ({
 			...state,
@@ -73,10 +68,15 @@ export default handleActions(
 			loading: false,
 			error: payload
 		}),
-		[UPDATE_STORE_AFTER_AUTOSAVE]: (state, { payload: { newPost } }) => ({
-			...state,
-			posts: state.posts.map(post => (post.id === newPost.id ? newPost : post))
-		})
+		[UPDATE_STORE_AFTER_AUTOSAVE]: (state, { payload: { newPost } }) => {
+			console.log('state', state.posts)
+			return {
+				...state,
+				posts: state.posts.map(
+					post => (post.id === newPost.id ? newPost : post)
+				)
+			}
+		}
 	},
 	initialState
 )

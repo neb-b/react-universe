@@ -8,8 +8,8 @@ export default (req, res) => {
 			res.cookie('auth', token)
 
 			// if valid credentials, getDashboard
-			getDashboard().then(posts => {
-				return res.send({ posts })
+			getDashboard().then(dashboard => {
+				return res.send({ dashboard })
 			})
 		})
 		.catch(err => {

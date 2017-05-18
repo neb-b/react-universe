@@ -1,7 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { StyleSheet, css } from 'aphrodite'
 import moment from 'moment'
-import PostEditor from './dashboard/post-editor.connected'
 import Button from './common/button'
 const formatDate = dateStr => moment(dateStr).format('hh:mm a ddd MM/YY')
 
@@ -16,9 +16,10 @@ const Dashboard = (props: { posts: Array<Object> }) => {
 		editPost,
 		publishPost,
 		deletePost,
-		justDeleted
+		justDeleted,
+		history
 	} = props
-	console.log('posts', posts)
+
 	return (
 		<div className="dashboard-wrapper">
 			{justDeleted && <div>Post deleted</div>}
@@ -28,12 +29,15 @@ const Dashboard = (props: { posts: Array<Object> }) => {
 					<div>
 						{posts.map(
 							(post: { title: string, dateCreated: string }, index) => {
-								const { title, dateCreated, lastEdited, published } = post
+								const { title, dateCreated, lastEdited, published, id } = post
 								return (
 									<div
 										key={index}
-										onClick={() => editPost(post)}
 										className={css(styles.post)}
+										onClick={() => {
+											editPost(post)
+											history.push(`/admin/edit/${id}`)
+										}}
 									>
 										<div style={{ width: 100, paddingTop: 5 }}>
 											{published ? 'published' : 'draft'}
@@ -49,12 +53,6 @@ const Dashboard = (props: { posts: Array<Object> }) => {
 							}
 						)}
 					</div>}
-				{isEditing &&
-					<PostEditor
-						stopEditing={stopEditing}
-						publishPost={publishPost}
-						deletePost={deletePost}
-					/>}
 			</div>
 		</div>
 	)

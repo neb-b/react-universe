@@ -42,7 +42,7 @@ export function login(userLoginObj, dispatch) {
 	dispatch(onLoginRequest())
 	return axios
 		.post(`${ROOT_URL}/login`, { ...userLoginObj })
-		.then(({ data: { posts } }) => {
+		.then(({ data: { dashboard: { posts } } }) => {
 			dispatch(onLoginSuccess({ posts }))
 		})
 		.catch(err => dispatch(onLoginError(err)))
@@ -108,4 +108,10 @@ export function deletePost(id) {
 
 export function updateStoreAfterAutoSave(newPost) {
 	return dispatch => dispatch(onUpdateStoreAfterAutoSave({ newPost }))
+}
+
+export function loadPosts() {
+	return dispatch => {
+		dispatch()
+	}
 }

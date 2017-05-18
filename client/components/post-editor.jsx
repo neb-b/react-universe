@@ -4,8 +4,7 @@ import { connect } from 'react-redux'
 import io from 'socket.io-client'
 import _ from 'lodash'
 import moment from 'moment'
-import { updateStoreAfterAutoSave } from '../../redux/action-creators/dashboard'
-import Button from '../common/button'
+import Button from './common/button'
 import Title from './post-editor/title'
 import Body from './post-editor/body'
 
@@ -19,9 +18,9 @@ class PostEditor extends Component {
 			justSaved: false
 		}
 
-		this.socket = io('http://localhost:3000')
 		this.throttledAutoSave = _.debounce(this.autoSave, 2000)
 		this.justSavedTimeout = null
+		this.socket = io('http://localhost:3000')
 	}
 
 	componentDidMount() {
@@ -68,6 +67,7 @@ class PostEditor extends Component {
 
 	// the backend is saved, just update store with new post
 	_handleAutoSaveSucces(savedPost) {
+		const { updateStoreAfterAutoSave } = this.props
 		console.log('savedPost', savedPost)
 		updateStoreAfterAutoSave(savedPost)
 
@@ -87,7 +87,8 @@ class PostEditor extends Component {
 			publishPost,
 			deletePost,
 			post,
-			post: { dateCreated, title, body, id, published, lastEdited }
+			post: { dateCreated, title, body, id, published, lastEdited },
+			history
 		} = this.props
 
 		return (
@@ -108,7 +109,14 @@ class PostEditor extends Component {
 						{published ? 'un publish' : 'publish'}
 					</Button>
 					<Button onClick={() => deletePost(id)}>Delete</Button>
-					<Button onClick={stopEditing}>Back to posts</Button>
+					<Button
+						onClick={() => {
+							stopEditing()
+							history.push('/admin')
+						}}
+					>
+						Back to posts
+					</Button>
 				</div>
 				<div>
 					{this.state.justSaved && <p>Saved</p>}
@@ -128,13 +136,6 @@ class PostEditor extends Component {
 	}
 }
 
-const mapStateToProps = s => ({
-	post: s.post,
-	// so redux form can pull values automatically
-	initialValues: { ...s.post },
-	postEditorForm: s.form.postEditor
-})
-
 // Using redux form just to handle the input actions
 // Submit won't submit the form, but emit a socket message
 const PostEditorForm = reduxForm({
@@ -142,6 +143,4 @@ const PostEditorForm = reduxForm({
 	enableReinitialize: true
 })(PostEditor)
 
-export default connect(mapStateToProps, { updateStoreAfterAutoSave })(
-	PostEditorForm
-)
+export default PostEditorForm

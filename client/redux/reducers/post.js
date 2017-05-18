@@ -11,7 +11,8 @@ import {
 	PUBLISH_POST_SUCCESS,
 	DELETE_POST_REQUEST,
 	DELETE_POST_SUCCESS,
-	DELETE_POST_ERROR
+	DELETE_POST_ERROR,
+	UPDATE_STORE_AFTER_AUTOSAVE
 } from '../constants'
 
 const initialState = {
@@ -63,6 +64,10 @@ export default handleActions(
 			loading: false,
 			error: payload,
 			post: {}
+		}),
+		[UPDATE_STORE_AFTER_AUTOSAVE]: (state, { payload: { newPost } }) => ({
+			...state,
+			...newPost
 		})
 	},
 	initialState
