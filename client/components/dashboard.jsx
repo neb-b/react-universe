@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { StyleSheet, css } from 'aphrodite'
 import moment from 'moment'
 import Button from './common/button'
-const formatDate = dateStr => moment(dateStr).format('hh:mm a ddd MM/YY')
+import formatDate from '../helpers/date'
 
 const Dashboard = (props: { posts: Array<Object> }) => {
 	const {

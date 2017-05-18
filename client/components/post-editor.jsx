@@ -7,6 +7,7 @@ import moment from 'moment'
 import Button from './common/button'
 import Title from './post-editor/title'
 import Body from './post-editor/body'
+import formatDate from '../helpers/date'
 
 class PostEditor extends Component {
 	constructor() {
@@ -62,11 +63,11 @@ class PostEditor extends Component {
 		} = this.props
 
 		// if state hasn't changed, don't need to save
-		if (
-			_.isEqual(this.state.lastSaved.title, title) &&
-			_.isEqual(this.state.lastSaved.body, body)
-		)
-			return
+		if (this.state.lastSaved) {
+			const sameTitle = _.isEqual(this.state.lastSaved.title, title)
+			const sameBody = _.isEqual(this.state.lastSaved.body, body)
+			if (sameTitle && sameBody) return
+		}
 
 		// title and body are the only values a user could edit to cause autosave to run
 		// also need id
@@ -126,8 +127,8 @@ class PostEditor extends Component {
 				</div>
 				<div>
 					{this.state.justSaved && <p>Saved</p>}
-					<p>Created on {moment(dateCreated).format() || ''}</p>
-					{lastEdited && <p>Last edited: {moment(lastEdited).format()}</p>}
+					<p>Created on {formatDate(dateCreated)}</p>
+					{lastEdited && <p>Last edited: {formatDate(lastEdited)}</p>}
 				</div>
 				<form className="post-form" onSubmit={e => e.preventDefault()}>
 					<Field
