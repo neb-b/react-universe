@@ -11,8 +11,9 @@ import PostEditor from '../components/post-editor'
 
 class PostEditorPage extends Component {
 	render() {
+		const { match } = this.props
 		return (
-			<Page>
+			<Page match={match}>
 				<PostEditor {...this.props} />
 			</Page>
 		)

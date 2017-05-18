@@ -4,9 +4,10 @@ import React from 'react'
 import Page from './page'
 import { StyleSheet, css } from 'aphrodite'
 
-const Home = () => {
+const Home = (props: { match: Object }) => {
+	const { match } = props
 	return (
-		<Page>
+		<Page match={match}>
 			<h1 className={css(styles.orange, styles.small)}>Hello!</h1>
 		</Page>
 	)

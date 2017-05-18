@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import io from 'socket.io-client'
 import _ from 'lodash'
 import moment from 'moment'
+import { StyleSheet, css } from 'aphrodite'
 import Button from './common/button'
 import Title from './post-editor/title'
 import Body from './post-editor/body'
@@ -111,37 +112,83 @@ class PostEditor extends Component {
 		return (
 			<div>
 				{this.state.error && <div>{error}</div>}
-				<div>
-					<Button onClick={this._handlePublish.bind(this)}>
-						{published ? 'un publish' : 'publish'}
-					</Button>
-					<Button onClick={() => deletePost(id)}>Delete</Button>
-					<Button
-						onClick={() => {
-							stopEditing()
-							history.push('/admin')
-						}}
-					>
-						Back to posts
-					</Button>
+
+				<div className={css(styles.postWrapper)}>
+					<div className={css(styles.postActions)}>
+						<Button
+							fakeLink
+							semiBold
+							onClick={() => {
+								stopEditing()
+								history.push('/admin')
+							}}
+						>
+							Back to list of posts
+						</Button>
+						<Button fakeLink semiBold onClick={this._handlePublish.bind(this)}>
+							{published ? 'Unpublish post' : 'Publish post'}
+						</Button>
+						<Button fakeLink semiBold onClick={() => deletePost(id)}>
+							Delete post
+						</Button>
+					</div>
+					<div className={css(styles.postContent)}>
+						<form className="post-form" onSubmit={e => e.preventDefault()}>
+							<Field
+								name="title"
+								component={Title}
+								save={this.autoSave.bind(this)}
+							/>
+							<div>
+								<div className={css(styles.saved)}>
+									{this.state.justSaved && <span>Saved</span>}
+								</div>
+								<div className={css(styles.postInfo)}>
+									<span>Created on {formatDate(dateCreated)}</span><br />
+									{lastEdited &&
+										<span>Last edited: {formatDate(lastEdited)}</span>}
+								</div>
+							</div>
+							<Field
+								name="body"
+								component={Body}
+								save={this.autoSave.bind(this)}
+							/>
+						</form>
+					</div>
 				</div>
-				<div>
-					{this.state.justSaved && <p>Saved</p>}
-					<p>Created on {formatDate(dateCreated)}</p>
-					{lastEdited && <p>Last edited: {formatDate(lastEdited)}</p>}
-				</div>
-				<form className="post-form" onSubmit={e => e.preventDefault()}>
-					<Field
-						name="title"
-						component={Title}
-						save={this.autoSave.bind(this)}
-					/>
-					<Field name="body" component={Body} save={this.autoSave.bind(this)} />
-				</form>
 			</div>
 		)
 	}
 }
+
+const styles = StyleSheet.create({
+	postWrapper: {
+		display: 'flex',
+		'@media (max-width: 480px)': {
+			flexDirection: 'column'
+		}
+	},
+	postActions: {
+		display: 'flex',
+		flexDirection: 'column',
+		fontSize: '0.9em',
+		'@media (max-width: 480px)': {
+			flexDirection: 'row'
+		}
+	},
+	postContent: {
+		'@media (min-width: 480px)': {
+			paddingLeft: 20
+		}
+	},
+	saved: {
+		height: 15
+	},
+	postInfo: {
+		paddingTop: 10
+	}
+})
 
 // Using redux form just to handle the input actions
 // Submit won't submit the form, but emit a socket message

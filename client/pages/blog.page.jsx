@@ -20,9 +20,9 @@ class BlogPage extends Component {
 	}
 
 	render() {
-		const { posts } = this.props
+		const { posts, match } = this.props
 		return (
-			<Page>
+			<Page match={match}>
 				<div className={css(styles.red)}>
 					<h1>My Blog</h1>
 					<Blog posts={posts} />

@@ -22,10 +22,10 @@ class Admin extends Component {
 	}
 
 	render() {
-		const { loggedIn, loading } = this.props
+		const { loggedIn, loading, match } = this.props
 
 		return (
-			<Page>
+			<Page match={match}>
 				{!loggedIn && <Login loading={loading} />}
 				{loggedIn && <AdminDashboard {...this.props} />}
 			</Page>
