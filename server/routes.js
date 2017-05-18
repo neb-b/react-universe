@@ -11,8 +11,10 @@ const Router = express.Router()
 
 Router.post('/login', login)
 Router.get('/posts', getPublicPosts)
+
+// routes for create/delete
+// all editing will be done through web socket in index.js
 Router.post('/posts/create', auth, createPost)
-Router.put('/posts/:id/publish', auth, publishPost)
 Router.delete('/posts/:id', auth, deletePost)
 
 export default Router

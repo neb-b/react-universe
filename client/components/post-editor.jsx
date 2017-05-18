@@ -49,6 +49,11 @@ class PostEditor extends Component {
 		this.throttledAutoSave()
 	}
 
+	editPost(newPostValues) {
+		this.setState({ saving: true, lastSaved: newPostValues })
+		this.socket.emit('editPost', newPostValues)
+	}
+
 	autoSave() {
 		// will run if user stops typing for 2 seconds or form onBlur
 		// socket.emit with new post data
@@ -57,28 +62,40 @@ class PostEditor extends Component {
 		} = this.props
 
 		// if state hasn't changed, don't need to save
-		if (_.isEqual(this.state.lastSaved, values)) return
+		if (
+			_.isEqual(this.state.lastSaved.title, title) &&
+			_.isEqual(this.state.lastSaved.body, body)
+		)
+			return
 
 		// title and body are the only values a user could edit to cause autosave to run
+		// also need id
 		const newValues = { title, body, id }
-		this.socket.emit('editPost', newValues)
-		this.setState({ saving: true, lastSaved: values })
+		this.editPost(newValues)
 	}
 
 	// the backend is saved, just update store with new post
 	_handleAutoSaveSucces(savedPost) {
 		const { updateStoreAfterAutoSave } = this.props
-		console.log('savedPost', savedPost)
 		updateStoreAfterAutoSave(savedPost)
 
 		this.setState({ saving: false, justSaved: true })
 		this.justSavedTimeout = setTimeout(() => {
 			this.setState({ justSaved: false })
-		}, 2000)
+		}, 1500)
 	}
 
 	_handleAutoSaveError(err) {
 		console.log('autosave error!', err)
+	}
+
+	_handlePublish() {
+		const { post: { id, published } } = this.props
+		const newPostVals = { id, published: !published }
+		if (!published) {
+			newPostVals.datePublished = new Date().toISOString()
+		}
+		this.editPost(newPostVals)
 	}
 
 	render() {
@@ -94,18 +111,7 @@ class PostEditor extends Component {
 		return (
 			<div>
 				<div>
-					<Button
-						onClick={() => {
-							// TODO:
-							// move this logic out of component
-							const newPostVals = { id, published: !published }
-							if (!published) {
-								newPostVals.datePublished = new Date().toISOString()
-							}
-
-							publishPost(newPostVals)
-						}}
-					>
+					<Button onClick={this._handlePublish.bind(this)}>
 						{published ? 'un publish' : 'publish'}
 					</Button>
 					<Button onClick={() => deletePost(id)}>Delete</Button>
