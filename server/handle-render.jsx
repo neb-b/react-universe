@@ -7,6 +7,7 @@ import { StyleSheetServer } from 'aphrodite'
 import App from '../client/app'
 import reducers from '../client/redux/reducers'
 import { getPublicPosts, getDashboard, getPost, authorize } from './firebase'
+import globalStyles from '../client/styles/global.css'
 
 const createHtml = (url, preloadedState, res) => {
 	const store = createStore(reducers, preloadedState)
@@ -31,7 +32,9 @@ const createHtml = (url, preloadedState, res) => {
 		<!doctype html>
 		<html>
 			<head>
+				<meta name="viewport" content="width=device-width, initial-scale=1">
 				<title>React Universe</title>
+				<style>${globalStyles.toString()}</style>
 				<style>${css.content}</style>
 			</head>
 			<body>

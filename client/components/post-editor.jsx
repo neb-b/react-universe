@@ -59,14 +59,13 @@ class PostEditor extends Component {
 		// will run if user stops typing for 2 seconds or form onBlur
 		// socket.emit with new post data
 		const {
-			postEditorForm: { values, values: { title, body, id } }
+			postEditorForm: { values, values: { title, body, id } },
+			post
 		} = this.props
 
 		// if state hasn't changed, don't need to save
-		if (this.state.lastSaved) {
-			const sameTitle = _.isEqual(this.state.lastSaved.title, title)
-			const sameBody = _.isEqual(this.state.lastSaved.body, body)
-			if (sameTitle && sameBody) return
+		if (_.isEqual(post, values)) {
+			return
 		}
 
 		// title and body are the only values a user could edit to cause autosave to run
@@ -87,7 +86,7 @@ class PostEditor extends Component {
 	}
 
 	_handleAutoSaveError(err) {
-		console.log('autosave error!', err)
+		this.setState({ err })
 	}
 
 	_handlePublish() {
@@ -111,6 +110,7 @@ class PostEditor extends Component {
 
 		return (
 			<div>
+				{this.state.error && <div>{error}</div>}
 				<div>
 					<Button onClick={this._handlePublish.bind(this)}>
 						{published ? 'un publish' : 'publish'}
