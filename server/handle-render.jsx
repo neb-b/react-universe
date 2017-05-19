@@ -58,8 +58,8 @@ export default function handleRender(req, res) {
 	const endpoint = pieces[1]
 	const isEditing = pieces[2] === 'edit'
 	const editingId = pieces[3]
-	const isBlogEndpoint = endpoint === 'blog'
-	const isAdminEndpoint = endpoint === 'admin'
+	const isBlogEndpoint = endpoint.slice(0, 4) === 'blog'
+	const isAdminEndpoint = endpoint.slice(0, 5) === 'admin'
 	const { cookies: { auth: authToken } } = req
 
 	const sendHtml = reduxState => {
