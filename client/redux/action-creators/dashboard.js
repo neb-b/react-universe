@@ -99,6 +99,7 @@ export function deletePost(id) {
 			.delete(`${ROOT_URL}/posts/${id}`)
 			.then(() => {
 				dispatch(onDeletePostSuccess({ id }))
+				window.location = '/admin?deleted=true'
 			})
 			.catch(err => {
 				dispatch(onDeletePostError(err))

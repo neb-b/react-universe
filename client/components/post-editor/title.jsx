@@ -7,7 +7,7 @@ const Title = ({ input, save }) => {
 			<input
 				{...input}
 				onBlur={save}
-				placeholder="Untitled"
+				placeholder="Title"
 				id="post-title"
 				className={`${css(styles.title)} post--input`}
 			/>
@@ -18,9 +18,11 @@ const Title = ({ input, save }) => {
 const styles = StyleSheet.create({
 	title: {
 		border: 'none',
+		outline: 'none',
 		margin: 0,
 		padding: 0,
 		fontSize: '2em',
+		fontWeight: 700,
 		borderBottom: '2 solid black'
 	}
 })

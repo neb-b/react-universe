@@ -4,7 +4,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {
 	updateStoreAfterAutoSave,
-	stopEditing
+	stopEditing,
+	deletePost
 } from '../redux/action-creators/dashboard'
 import Page from './page'
 import PostEditor from '../components/post-editor'
@@ -29,5 +30,6 @@ const mapStateToProps = s => ({
 
 export default connect(mapStateToProps, {
 	updateStoreAfterAutoSave,
-	stopEditing
+	stopEditing,
+	deletePost
 })(PostEditorPage)
