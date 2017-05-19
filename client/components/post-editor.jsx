@@ -5,6 +5,7 @@ import io from 'socket.io-client'
 import _ from 'lodash'
 import moment from 'moment'
 import { StyleSheet, css } from 'aphrodite'
+import ContentEditable from 'react-contenteditable'
 import Button from './common/button'
 import Title from './post-editor/title'
 import Body from './post-editor/body'
@@ -17,7 +18,8 @@ class PostEditor extends Component {
 		this.state = {
 			socketConnected: false,
 			saving: false,
-			justSaved: false
+			justSaved: false,
+			body: ''
 		}
 
 		this.throttledAutoSave = _.debounce(this.autoSave, 2000)
@@ -60,9 +62,10 @@ class PostEditor extends Component {
 		// will run if user stops typing for 2 seconds or form onBlur
 		// socket.emit with new post data
 		const {
-			postEditorForm: { values, values: { title, body, id } },
+			postEditorForm: { values, values: { title, id } },
 			post
 		} = this.props
+		const { body } = this.state.body
 
 		// if state hasn't changed, don't need to save
 		if (_.isEqual(post, values)) {
@@ -97,6 +100,10 @@ class PostEditor extends Component {
 			newPostVals.datePublished = new Date().toISOString()
 		}
 		this.editPost(newPostVals)
+	}
+
+	_handleContentChange(e) {
+		this.setState({ body: e.target.value })
 	}
 
 	render() {
@@ -149,10 +156,10 @@ class PostEditor extends Component {
 										<span>Last edited: {formatDate(lastEdited)}</span>}
 								</div>
 							</div>
-							<Field
-								name="body"
-								component={Body}
-								save={this.autoSave.bind(this)}
+							<ContentEditable
+								className={css(styles.editable)}
+								html={this.state.body}
+								onChange={this._handleContentChange.bind(this)}
 							/>
 						</form>
 					</div>
@@ -178,6 +185,7 @@ const styles = StyleSheet.create({
 		}
 	},
 	postContent: {
+		maxWidth: 600,
 		'@media (min-width: 480px)': {
 			paddingLeft: 20
 		}
@@ -186,6 +194,11 @@ const styles = StyleSheet.create({
 		height: 15
 	},
 	postInfo: {
+		paddingTop: 10
+	},
+	editable: {
+		outline: 'none',
+		minHeight: 500,
 		paddingTop: 10
 	}
 })
