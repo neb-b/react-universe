@@ -19,7 +19,8 @@ class PostEditor extends Component {
 			socketConnected: false,
 			saving: false,
 			justSaved: false,
-			body: ''
+			body: '',
+			title: ''
 		}
 
 		this.throttledAutoSave = _.debounce(this.autoSave, 2000)
@@ -37,10 +38,8 @@ class PostEditor extends Component {
 		this.socket.on('autosave_success', this._handleAutoSaveSucces.bind(this))
 		this.socket.on('autosave_error', this._handleAutoSaveError.bind(this))
 
-		const inputs = document.querySelectorAll('.post--input')
-		inputs.forEach(node =>
-			node.addEventListener('keyup', this._handleKeyUp.bind(this))
-		)
+		// const body = document.querySelector('.editable_1893mw')
+		// body.addEventListener('keyup', this.throttledAutoSave)
 	}
 
 	componentWillUnmount() {
@@ -61,20 +60,19 @@ class PostEditor extends Component {
 	autoSave() {
 		// will run if user stops typing for 2 seconds or form onBlur
 		// socket.emit with new post data
-		const {
-			postEditorForm: { values, values: { title, id } },
-			post
-		} = this.props
-		const { body } = this.state.body
+		const { post: { id } } = this.props
+		// console.log('post', post);
+		const { body, title } = this.state
 
 		// if state hasn't changed, don't need to save
-		if (_.isEqual(post, values)) {
-			return
-		}
+		// if (_.isEqual(post, values)) {
+		// 	return
+		// }
 
 		// title and body are the only values a user could edit to cause autosave to run
 		// also need id
 		const newValues = { title, body, id }
+		console.log(' newvalu', newValues)
 		this.editPost(newValues)
 	}
 
@@ -104,6 +102,12 @@ class PostEditor extends Component {
 
 	_handleContentChange(e) {
 		this.setState({ body: e.target.value })
+		this.throttledAutoSave()
+	}
+
+	_handleTitleChange(e) {
+		this.setState({ title: e.target.value })
+		this.throttledAutoSave()
 	}
 
 	render() {
@@ -115,6 +119,7 @@ class PostEditor extends Component {
 			post: { dateCreated, title, body, id, published, lastEdited },
 			history
 		} = this.props
+		// console.log('this.state', this.state);
 
 		return (
 			<div>
@@ -140,28 +145,26 @@ class PostEditor extends Component {
 						</Button>
 					</div>
 					<div className={css(styles.postContent)}>
-						<form className="post-form" onSubmit={e => e.preventDefault()}>
-							<Field
-								name="title"
-								component={Title}
-								save={this.autoSave.bind(this)}
-							/>
-							<div>
-								<div className={css(styles.saved)}>
-									{this.state.justSaved && <span>Saved</span>}
-								</div>
-								<div className={css(styles.postInfo)}>
-									<span>Created on {formatDate(dateCreated)}</span><br />
-									{lastEdited &&
-										<span>Last edited: {formatDate(lastEdited)}</span>}
-								</div>
+						<ContentEditable
+							className={css(styles.editableTitle)}
+							html={this.state.title || post.title}
+							onChange={this._handleTitleChange.bind(this)}
+						/>
+						<div>
+							<div className={css(styles.saved)}>
+								{this.state.justSaved && <span>Saved</span>}
 							</div>
-							<ContentEditable
-								className={css(styles.editable)}
-								html={this.state.body}
-								onChange={this._handleContentChange.bind(this)}
-							/>
-						</form>
+							<div className={css(styles.postInfo)}>
+								<span>Created on {formatDate(dateCreated)}</span><br />
+								{lastEdited &&
+									<span>Last edited: {formatDate(lastEdited)}</span>}
+							</div>
+						</div>
+						<ContentEditable
+							className={css(styles.editableBody)}
+							html={this.state.body || post.body}
+							onChange={this._handleContentChange.bind(this)}
+						/>
 					</div>
 				</div>
 			</div>
@@ -196,18 +199,25 @@ const styles = StyleSheet.create({
 	postInfo: {
 		paddingTop: 10
 	},
-	editable: {
+	editableTitle: {
+		outline: 'none',
+		borderBottom: '1px solid black'
+	},
+	editableBody: {
 		outline: 'none',
 		minHeight: 500,
 		paddingTop: 10
+	},
+	'[contenteditable=true]:empty:before': {
+		content: 'ENter a title'
 	}
 })
 
 // Using redux form just to handle the input actions
-// Submit won't submit the form, but emit a socket message
-const PostEditorForm = reduxForm({
-	form: 'postEditor',
-	enableReinitialize: true
-})(PostEditor)
+// // Submit won't submit the form, but emit a socket message
+// const PostEditorForm = reduxForm({
+// 	form: 'postEditor',
+// 	enableReinitialize: true
+// })(PostEditor)
 
-export default PostEditorForm
+export default PostEditor
