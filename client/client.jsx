@@ -10,7 +10,7 @@ import reducers from './redux/reducers'
 
 const loggerMiddleware = createLogger()
 const preloadedState = window.__PRELOADED_STATE__
-delete window.__PRELOADED_STATE__
+window.__PRELOADED_STATE__ = null
 
 console.log('preloadedState', preloadedState)
 
