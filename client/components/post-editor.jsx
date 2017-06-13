@@ -145,26 +145,7 @@ class PostEditor extends Component {
 						</Button>
 					</div>
 					<div className={css(styles.postContent)}>
-						<ContentEditable
-							className={css(styles.editableTitle)}
-							html={this.state.title || post.title}
-							onChange={this._handleTitleChange.bind(this)}
-						/>
-						<div>
-							<div className={css(styles.saved)}>
-								{this.state.justSaved && <span>Saved</span>}
-							</div>
-							<div className={css(styles.postInfo)}>
-								<span>Created on {formatDate(dateCreated)}</span><br />
-								{lastEdited &&
-									<span>Last edited: {formatDate(lastEdited)}</span>}
-							</div>
-						</div>
-						<ContentEditable
-							className={css(styles.editableBody)}
-							html={this.state.body || post.body}
-							onChange={this._handleContentChange.bind(this)}
-						/>
+						<h1>Title</h1>
 					</div>
 				</div>
 			</div>
